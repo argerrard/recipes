@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component {
 
     render () {
         return (
             <div className="ui large menu">
-                <div className="header item">
+                <Link to="/" className="header item">
                     Recipes
-                </div>
+                </Link>
                 <div className="right menu">
-                    <button className="ui primary button">Login</button>
-                    <button className="ui primary button">Sign Up</button>
+                    <Link to="/login" className="ui primary button">Login</Link>
+                    <Link to="/signup" className="ui primary button">Sign Up</Link>
                 </div>
             </div>
         );
