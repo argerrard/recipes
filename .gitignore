@@ -6,6 +6,7 @@ node_modules
 
 #database files
 config
+db/db.config
 
 # testing
 coverage
