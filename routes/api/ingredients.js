@@ -12,9 +12,12 @@ router.get('/', (req, res) => {
 });
 
 
-//@route    POST api/ingredients
-//@desc     Add a new ingredient to the app
-//@access   Private
+// @route    POST api/ingredients
+// @desc     Add a new ingredient to the app
+// @access   Private
+// TODO:     Validate that the user sending the request exists
+// TODO:     Validate the user sending the request is logged in
+// TODO:     Add support for optional nutrition fields (ie: saturated fat, etc.)
 router.post('/', (req, res) => {
     const { name, userId, servingSize, 
         measurementType, calories, protein, fat, carbs } = req.body;
@@ -26,10 +29,6 @@ router.post('/', (req, res) => {
             return;
     }
 
-    // TODO: Validate that the user sending the request exists
-    // TODO: Validate the user sending the request is logged in
-    // TODO: Add support for optional nutrition fields (ie: saturated fat, etc.)
-
     // Validate that numeric fields are numbers
     if ([userId, servingSize, calories, protein, fat, carbs].map((field) => {
         if (isNaN(field)) return true;
@@ -40,7 +39,22 @@ router.post('/', (req, res) => {
     } 
 
     // User request passed validation, add to the database
-    res.json({ msg: "success" });
+    const insertIngredientText = 'INSERT INTO Ingredient (name, uploader_id, serving_size, measurement_type, '+
+    'calories, protein, fat, carbs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);';
+    const ingredientValues = [name, userId, servingSize, measurementType, calories, protein, fat, carbs];
+    
+    db.query(insertIngredientText, ingredientValues, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({ error: "There was a problem adding the ingredient." });
+            return;
+        }
+
+        //Record was added successfully
+        res.status(201).json({ message: 'Ingredient created', name, userId,
+            servingSize, measurementType, calories, protein, fat, carbs 
+        });
+    });
 });
 
 module.exports = router;
