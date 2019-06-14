@@ -1,6 +1,14 @@
-CREATE TABLE ingredients (
+CREATE TABLE AppUser (
+    id SERIAL PRIMARY KEY,
+    email varchar(50) NOT NULL,
+    password char(60) NOT NULL,
+    register_date DATE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE Ingredient (
     id SERIAL PRIMARY KEY,
     name text NOT NULL,
+    uploader_id integer REFERENCES AppUser(id) ON DELETE SET NULL,
     serving_size decimal(6,1) NOT NULL,
     measurement_type varchar(10) NOT NULL,
     verified boolean DEFAULT FALSE,
