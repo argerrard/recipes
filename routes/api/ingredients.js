@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db');
 
-// @route   GET api/ingredients
-// @desc    Get all ingredients
-// @access  Public
+// @route    GET api/ingredients
+// @desc     Get all ingredients
+// @access   Public
 router.get('/', (req, res) => {
 
     const getIngredientsText = 'SELECT * FROM Ingredient';
@@ -69,5 +69,20 @@ router.post('/', (req, res) => {
 
 
 //@route    DELETE api/ingredients/:id
+//@desc     Delete an ingredient (only the user that owns can delete)
+//@access   Private
+//TODO:     Authenticate the user sending the delete request
+router.delete('/:id', (req, res) => {
+    res.send("Hit delete route");
+});
+
+
+//@route    PUT api/ingredients/:id
+//@desc     Update an ingredient's information (only by the owned user)
+//@access   Private
+//TODO:     Authenticate the user sending the request
+router.put('/:id', (req, res) => {
+    res.send("Hit update route");
+});
 
 module.exports = router;
