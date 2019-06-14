@@ -16,7 +16,31 @@ router.get('/', (req, res) => {
 //@desc     Add a new ingredient to the app
 //@access   Private
 router.post('/', (req, res) => {
+    const { name, userId, servingSize, 
+        measurementType, calories, protein, fat, carbs } = req.body;
 
+    // Validate that required parameters are present
+    if (!name || !userId || !servingSize || !measurementType || !calories ||
+        !protein || !fat || !carbs) {
+            res.status(400).json({ error: "Required field is missing." });
+            return;
+    }
+
+    // TODO: Validate that the user sending the request exists
+    // TODO: Validate the user sending the request is logged in
+    // TODO: Add support for optional nutrition fields (ie: saturated fat, etc.)
+
+    // Validate that numeric fields are numbers
+    if ([userId, servingSize, calories, protein, fat, carbs].map((field) => {
+        if (isNaN(field)) return true;
+        return false;
+    }).includes(true)) {
+        res.status(400).json({ error: "A numeric field was supplied as not a number." });
+        return;
+    } 
+
+    // User request passed validation, add to the database
+    res.json({ msg: "success" });
 });
 
 module.exports = router;
