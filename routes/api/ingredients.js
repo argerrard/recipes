@@ -6,9 +6,19 @@ const db = require('../../db');
 // @desc    Get all ingredients
 // @access  Public
 router.get('/', (req, res) => {
-    res.json({
-        status: 'It worked'
+
+    const getIngredientsText = 'SELECT * FROM Ingredient';
+
+    //Experimenting with using promises
+    db.query(getIngredientsText, [])
+    .then(result => {
+        res.json({ ingredients: result.rows })
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: "Unable to fetch ingredients." });
     });
+    
 });
 
 
@@ -51,10 +61,13 @@ router.post('/', (req, res) => {
         }
 
         //Record was added successfully
-        res.status(201).json({ message: 'Ingredient created', name, userId,
-            servingSize, measurementType, calories, protein, fat, carbs 
-        });
+        console.log(`User ${userId} created ingredient: ${name}`);
+        res.status(201).json({ name, userId, servingSize, measurementType, 
+            calories, protein, fat, carbs });
     });
 });
+
+
+//@route    DELETE api/ingredients/:id
 
 module.exports = router;
