@@ -12,13 +12,41 @@ router.get('/', (req, res) => {
     //Experimenting with using promises
     db.query(getIngredientsText, [])
     .then(result => {
-        res.json({ ingredients: result.rows })
+        return res.json({ ingredients: result.rows })
     })
     .catch(err => {
         console.log(err);
-        res.status(500).json({ error: "Unable to fetch ingredients." });
+        return res.status(500).json({ error: "Unable to fetch ingredients." });
     });
     
+});
+
+//@route    GET api/ingredients/:id
+//@desc     Get the ingredient with given id
+//@access   Public
+router.get('/:id', (req, res) => {
+    
+    const id = req.params.id;
+
+    //ensure passed in ID is numeric
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "ID must be numeric." });
+    }
+
+    const getIngredientText = 'SELECT * FROM Ingredient WHERE id=$1;';
+    const ingredientValues = [id];
+    db.query(getIngredientText, ingredientValues)
+    .then(result => {
+
+        //Return not found if no ID is found
+        if (!result.rows) {
+            
+        }
+    })
+    .catch(err => {
+
+    });
+
 });
 
 
@@ -35,8 +63,7 @@ router.post('/', (req, res) => {
     // Validate that required parameters are present
     if (!name || !userId || !servingSize || !measurementType || !calories ||
         !protein || !fat || !carbs) {
-            res.status(400).json({ error: "Required field is missing." });
-            return;
+            return res.status(400).json({ error: "Required field is missing." });
     }
 
     // Validate that numeric fields are numbers
@@ -44,25 +71,24 @@ router.post('/', (req, res) => {
         if (isNaN(field)) return true;
         return false;
     }).includes(true)) {
-        res.status(400).json({ error: "A numeric field was supplied as not a number." });
-        return;
+        return res.status(400).json({ error: "A numeric field was supplied as not a number." });
     } 
 
     // User request passed validation, add to the database
-    const insertIngredientText = 'INSERT INTO Ingredient (name, uploader_id, serving_size, measurement_type, '+
-    'calories, protein, fat, carbs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);';
+    const insertIngredientText = 'INSERT INTO Ingredient (name, uploaderId, servingSize, measurementType, '+
+    'calories, protein, fat, carbs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
     const ingredientValues = [name, userId, servingSize, measurementType, calories, protein, fat, carbs];
     
     db.query(insertIngredientText, ingredientValues, (err, result) => {
         if (err) {
             console.log(err);
-            res.status(500).json({ error: "There was a problem adding the ingredient." });
-            return;
+            return res.status(500).json({ error: "There was a problem adding the ingredient." });
         }
 
         //Record was added successfully
         console.log(`User ${userId} created ingredient: ${name}`);
-        res.status(201).json({ name, userId, servingSize, measurementType, 
+        console.log(result);
+        return res.status(201).json({ id: result.rows[0].id, name, userId, servingSize, measurementType, 
             calories, protein, fat, carbs });
     });
 });
