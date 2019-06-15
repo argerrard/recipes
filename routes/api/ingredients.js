@@ -39,12 +39,17 @@ router.get('/:id', (req, res) => {
     .then(result => {
 
         //Return not found if no ID is found
-        if (!result.rows) {
-            
+        if (result.rows.length === 0) {
+            console.log("no")
+            return res.status(404).json({ error: "Ingredient was not found." });
         }
+
+        //Ingredient is found
+        return res.json(result.rows[0]);
+
     })
     .catch(err => {
-
+        return res.status(500).json({ error: "There was a problem getting the ingredient." });
     });
 
 });
@@ -87,7 +92,6 @@ router.post('/', (req, res) => {
 
         //Record was added successfully
         console.log(`User ${userId} created ingredient: ${name}`);
-        console.log(result);
         return res.status(201).json({ id: result.rows[0].id, name, userId, servingSize, measurementType, 
             calories, protein, fat, carbs });
     });
@@ -98,8 +102,34 @@ router.post('/', (req, res) => {
 //@desc     Delete an ingredient (only the user that owns can delete)
 //@access   Private
 //TODO:     Authenticate the user sending the delete request
+//TODO:     Confirm the user deleting the request owns the ingredient
 router.delete('/:id', (req, res) => {
-    res.send("Hit delete route");
+    
+    const id = req.params.id;
+
+    //ensure passed in ID is numeric
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "ID must be numeric." });
+    }
+
+    const deleteText = 'DELETE FROM Ingredient WHERE id=$1';
+    const deleteValues = [id];
+    
+    //Delete entry from database
+    db.query(deleteText, deleteValues)
+    .then(result => {
+        if (result.rowCount === 0) return res.status(404).json({ error: 'Ingredient could not be found for deletion.' });
+
+        //Successful deletion
+        console.log(`Ingredient ID ${id} has been deleted`);
+        return res.json({ message: 'Ingredient successfully deleted.' });
+    })
+    .catch(err=> {
+        console.log(err);
+        return res.status(500).json({ error: 'There was a problem deleting the ingredient.' });
+    });
+
+
 });
 
 
@@ -107,6 +137,7 @@ router.delete('/:id', (req, res) => {
 //@desc     Update an ingredient's information (only by the owned user)
 //@access   Private
 //TODO:     Authenticate the user sending the request
+//TODO:     Confirm the user updating the request owns the ingredient
 router.put('/:id', (req, res) => {
     res.send("Hit update route");
 });
