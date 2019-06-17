@@ -4,10 +4,14 @@ import IngredientForm from './IngredientForm';
 
 class IngredientAdd extends React.Component {
 
+    onSubmit = (formValues) => {
+        console.log(formValues);
+    }
+
     render() {
         return (
             <div>
-                <IngredientForm />
+                <IngredientForm onSubmit={this.onSubmit} />
             </div>
         );
     }
