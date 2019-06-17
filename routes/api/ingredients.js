@@ -159,7 +159,6 @@ router.put('/:id', (req, res) => {
 
     db.query(updateText, updateValues)
     .then(result => {
-        console.log(result);
         if (result.rowCount === 1) {
             return res.status(200).json({ message: 'The ingredient was successfully updated.' });
         } else {
