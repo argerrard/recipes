@@ -1,9 +1,15 @@
 import React from 'react';
 
+import IngredientForm from './IngredientForm';
+
 class IngredientAdd extends React.Component {
 
     render() {
-        return <div>Add Ingredient</div>;
+        return (
+            <div>
+                <IngredientForm />
+            </div>
+        );
     }
 
 }
