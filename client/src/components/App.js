@@ -4,8 +4,11 @@ import { Router, Switch, Route } from 'react-router-dom';
 import Header from './Header';
 import history from '../history';
 import RecipeHome from './RecipeHome';
-import Login from './user-management/Login';
-import SignUp from './user-management/SignUp';
+import Login from './auth/Login';
+import SignUp from './auth/SignUp';
+import IngredientAdd from './ingredients/IngredientAdd';
+import IngredientList from './ingredients/IngredientList';
+
 
 const App = () => {
 
@@ -18,6 +21,8 @@ const App = () => {
                         <Route path="/" exact component={RecipeHome} />
                         <Route path="/login" exact component={Login} />
                         <Route path="/signup" exact component={SignUp} />
+                        <Route path="/ingredients" exact component={IngredientList} />
+                        <Route path="/ingredients/add" exact component={IngredientAdd} />
                     </Switch>
                 </div>
             </Router>
