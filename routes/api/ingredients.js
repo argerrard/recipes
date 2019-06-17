@@ -139,7 +139,39 @@ router.delete('/:id', (req, res) => {
 //TODO:     Authenticate the user sending the request
 //TODO:     Confirm the user updating the request owns the ingredient
 router.put('/:id', (req, res) => {
-    res.send("Hit update route");
+    const id = req.params.id;
+    const { name, servingSize, 
+        measurementType, calories, protein, fat, carbs } = req.body;
+
+    //Ensure ingredient id is numeric
+    if (isNaN(id)) return res.status(400).json({ error: 'Ingredient id must be numeric.' });
+
+    //Ensure the required parameters of the ingredient have been entered
+    if (!name || !servingSize || !measurementType || !calories ||
+        !protein || !fat || !carbs) {
+            return res.status(400).json({ error: "Required field is missing." });
+    }
+
+    //Update the ingredient record
+    const updateText = 'UPDATE Ingredient SET name = $1, servingSize = $2, measurementType = $3,' +
+    'calories = $4, protein = $5, fat = $6, carbs = $7 WHERE id = $8;';
+    const updateValues = [name, servingSize, measurementType, calories, protein, fat, carbs, id];
+
+    db.query(updateText, updateValues)
+    .then(result => {
+        console.log(result);
+        if (result.rowCount === 1) {
+            return res.status(200).json({ message: 'The ingredient was successfully updated.' });
+        } else {
+            return res.status(404).json({ error: 'The ingredient could not be found for updating.'});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({ error: 'There was a problem updating the ingredient.' });
+    });
+
+
 });
 
 module.exports = router;
