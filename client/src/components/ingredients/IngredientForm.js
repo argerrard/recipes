@@ -84,7 +84,31 @@ class IngredientForm extends React.Component {
 const validate = values => {
     const errors = {};
 
+    //Ingredient name validation
     if (!values.ingredientName) errors.ingredientName = "Please choose an ingredient name.";
+
+    //Serving Size validation
+    if (!values.servingSize){
+        errors.servingSize = "Please choose a serving size.";
+    } else if (isNaN(values.servingSize)) errors.servingSize = "Serving size must be numeric.";
+
+    //Measurement validation
+    if (!values.measurementType) {
+        errors.measurementType = "Please specify a form of measurement.";
+    } else if (!isNaN(values.measurementType)) {
+        errors.measurementType = "Measurement types should be words (ie: cups, spoonful, etc.)";
+    }
+
+    //Validation for nutrient types
+    const nutrients = ['calories', 'carbs', 'protein', 'fat']
+
+    nutrients.forEach(nutrient => {
+        if (!values[nutrient]) {
+            errors[nutrient] = `Please specify the amount of ${nutrient} in the ingredient.`;
+        } else if (isNaN(values[nutrient])){
+            errors[nutrient] = `The amount entered in ${nutrient} should be a number.`;
+        };
+    });
 
     return errors;
 }
