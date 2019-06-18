@@ -10,19 +10,34 @@ class IngredientForm extends React.Component {
     }
 
     renderErrors = () => {
-        var ingredientName, servingSize = null;
-        if (this.props.fieldInfo) {
-            ingredientName = this.props.fieldInfo.ingredientName;
-            servingSize = this.props.fieldInfo.servingSize;
+        if (!this.props.fieldInfo) {
+            return null;
         }
 
-        if (ingredientName && ingredientName.touched) {
-            return <div>{this.props.formErrors.ingredientName}</div>;
-        }
+        const formFields = ['ingredientName', 'servingSize', 'measurementType', 'calories', 
+                            'carbs', 'protein', 'fat'];
+        const errors = [];
 
-        if (servingSize && servingSize.touched) {
-            return <div>{this.props.formErrors.servingSize}</div>;
-        }
+        //Loop through each form field, if it has been touched and has a corresponding error,
+        //add it to the errors array to be shown
+        formFields.forEach(field => {
+            if (this.props.fieldInfo[field] && this.props.fieldInfo[field].touched
+                && this.props.formErrors[field]) {
+                errors.push(this.props.formErrors[field]);
+            }
+        });
+
+        if (errors.length === 0) return null;
+
+        //Render all errors in a message
+        return (
+            <Message negative>
+                <Message.Header>Careful!</Message.Header>
+                {errors.map((error, index) => {
+                    return <p key={index}>{error}</p>;
+                })}
+            </Message>
+        );
     }
 
     renderInput = ({ input, label, meta }) => {
@@ -58,7 +73,7 @@ class IngredientForm extends React.Component {
                     <Field name="fat" component={this.renderInput}
                             label="Fat (g)" />
                 </Form.Group>
-                <Form.Button content='Submit' />
+                <Form.Button primary content='Submit' />
                 {this.renderErrors()}
             </Form>
         );
@@ -68,11 +83,8 @@ class IngredientForm extends React.Component {
 
 const validate = values => {
     const errors = {};
-    const requiredFields = ['ingredientName', 'servingSize', 'measurementType', 'calories', 'carbs', 'protein', 'fat'];
 
-    requiredFields.forEach(field => {
-        if (!values[field]) errors[field] = 'Please fill out this field.';
-    });
+    if (!values.ingredientName) errors.ingredientName = "Please choose an ingredient name.";
 
     return errors;
 }
