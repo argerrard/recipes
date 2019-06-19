@@ -1,10 +1,12 @@
 import axios from 'axios';
 
+import history from '../../history';
 import {
     ADD_INGREDIENT,
     EDIT_INGREDIENT,
     DELETE_INGREDIENT,
-    ADD_INGREDIENT_ERROR
+    ADD_INGREDIENT_ERROR,
+    DISMISS_INGREDIENT_ADD
 } from '../types';
 
 
@@ -18,12 +20,19 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
             type: ADD_INGREDIENT,
             payload: response.data
         });
+
+        //Route back to main ingredients page
+        history.push('/ingredients');
+
     }).catch(error => {
         dispatch({
             type: ADD_INGREDIENT_ERROR,
             payload: error.data
         });
     });
+}
 
-
+//Action to dismiss any notifications about successful ingredient additions
+export const dismissIngredientAdd = () => {
+    return { type: DISMISS_INGREDIENT_ADD };
 }

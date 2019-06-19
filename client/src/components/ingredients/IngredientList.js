@@ -1,13 +1,41 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Message, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+import { dismissIngredientAdd } from '../../actions/ingredients';
 
 
 class IngredientList extends React.Component {
 
+    componentWillUnmount() {
+        this.props.dismissIngredientAdd();
+    }
+
+    renderSuccess() {
+
+        if (this.props.uploadSuccess) {
+            return (
+                <Grid>
+                    <Grid.Column width={4} />
+                    <Grid.Column width={8}>
+                        <Message positive onDismiss={this.props.dismissIngredientAdd}>
+                            <Message.Header>Success!</Message.Header>
+                            <p>{this.props.uploadedIngredient.name} was successfully added to our list of ingredients.</p>
+                        </Message>
+                    </Grid.Column>
+                    <Grid.Column width={4} />
+                </Grid>
+            );
+        }
+
+        return null;
+    }
+
     render() {
         return (
             <div>
+                {this.renderSuccess()}
                 <Button as={Link} to="/ingredients/add">Create New Ingredient</Button>
             </div>
         );
@@ -15,4 +43,11 @@ class IngredientList extends React.Component {
 
 }
 
-export default IngredientList;
+const mapStateToProps = (state) => {
+    return {
+        uploadSuccess: state.ingredient.uploadedIngredient.success,
+        uploadedIngredient: state.ingredient.uploadedIngredient.ingredient
+    };
+};
+
+export default connect(mapStateToProps, {dismissIngredientAdd})(IngredientList);
