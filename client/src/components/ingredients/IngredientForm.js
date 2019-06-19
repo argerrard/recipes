@@ -14,15 +14,16 @@ class IngredientForm extends React.Component {
             return null;
         }
 
-        const formFields = ['ingredientName', 'servingSize', 'measurementType', 'calories', 
+        const formFields = ['name', 'servingSize', 'measurementType', 'calories', 
                             'carbs', 'protein', 'fat'];
         const errors = [];
 
         //Loop through each form field, if it has been touched and has a corresponding error,
         //add it to the errors array to be shown
+
         formFields.forEach(field => {
-            if (this.props.fieldInfo[field] && this.props.fieldInfo[field].touched
-                && this.props.formErrors[field]) {
+            if (this.props.fieldInfo[field] && this.props.fieldInfo[field].touched &&
+                this.props.formErrors && this.props.formErrors[field]) {
                 errors.push(this.props.formErrors[field]);
             }
         });
@@ -53,7 +54,7 @@ class IngredientForm extends React.Component {
     render() {
         return (
             <Form onSubmit={this.props.handleSubmit(this.onSubmit)}>
-                <Field name="ingredientName" 
+                <Field name="name" 
                     label="Ingredient Name" 
                     component={this.renderInput} type="text" />
                 
@@ -85,7 +86,7 @@ const validate = values => {
     const errors = {};
 
     //Ingredient name validation
-    if (!values.ingredientName) errors.ingredientName = "Please choose an ingredient name.";
+    if (!values.name) errors.name = "Please choose an ingredient name.";
 
     //Serving Size validation
     if (!values.servingSize){

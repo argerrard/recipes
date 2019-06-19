@@ -62,6 +62,9 @@ router.get('/:id', (req, res) => {
 // TODO:     Validate the user sending the request is logged in
 // TODO:     Add support for optional nutrition fields (ie: saturated fat, etc.)
 router.post('/', (req, res) => {
+
+    console.log(req.body);
+
     const { name, userId, servingSize, 
         measurementType, calories, protein, fat, carbs } = req.body;
 
