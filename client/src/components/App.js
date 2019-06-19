@@ -16,7 +16,6 @@ const App = () => {
     return (
         <div>
             <Router history={history}>
-                <div>
                     <Header />
                     <Container>
                     <Switch>
@@ -27,7 +26,6 @@ const App = () => {
                         <Route path="/ingredients/add" exact component={IngredientAdd} />
                     </Switch>
                     </Container>
-                </div>
             </Router>
         </div>
     );

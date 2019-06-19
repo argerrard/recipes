@@ -1,52 +1,51 @@
 import React from 'react';
-import { Item, Table } from 'semantic-ui-react';
+import { Item, Grid, Icon, Container } from 'semantic-ui-react';
 
 class IngredientShow extends React.Component {
 
-    render() {
+    renderItem() {
         return (
-            <div>
-            <Item.Group>
                 <Item>
                     <Item.Content>
                         <Item.Header>Orange</Item.Header>
+                        <Item.Meta>Serving: 1 orange</Item.Meta>
+                        <Item.Description>
+                            <Grid>
+                                <Grid.Row>
+                                    <Grid.Column width={3}>
+                                        Calories: 100
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        Fat: 100g
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        Protein: 100g
+                                    </Grid.Column>
+                                    <Grid.Column width={5}>
+                                        Carbs: 100g
+                                    </Grid.Column>
+                                    <Grid.Column width={1}>
+                                        <Icon color='blue' name="edit" />
+                                    </Grid.Column>
+                                    <Grid.Column width={1}>
+                                        <Icon color='red' name="delete" />
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Item.Description>
                     </Item.Content>
-                    <Item.Description>
-
-                    </Item.Description>
                 </Item>
-            </Item.Group>
-
-            <Table basic='very'>
-            <Table.Header>
-            <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Status</Table.HeaderCell>
-                <Table.HeaderCell>Notes</Table.HeaderCell>
-            </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-            <Table.Row>
-                <Table.Cell>John</Table.Cell>
-                <Table.Cell>Approved</Table.Cell>
-                <Table.Cell>None</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-                <Table.Cell>Jamie</Table.Cell>
-                <Table.Cell>Approved</Table.Cell>
-                <Table.Cell>Requires call</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-                <Table.Cell>Jill</Table.Cell>
-                <Table.Cell>Denied</Table.Cell>
-                <Table.Cell>None</Table.Cell>
-            </Table.Row>
-            </Table.Body>
-            </Table>
-            </div>
         );
     } 
+
+    render() {
+        return (
+                <Item.Group divided>
+                {this.renderItem()}
+                {this.renderItem()}
+                </Item.Group>
+        );
+    }
 
 }
 

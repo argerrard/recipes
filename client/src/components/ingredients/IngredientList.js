@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Message, Grid } from 'semantic-ui-react';
+import { Button, Message, Grid, Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -35,11 +35,14 @@ class IngredientList extends React.Component {
 
     render() {
         return (
-            <div>
+            <Container>
                 {this.renderSuccess()}
-                <Button as={Link} to="/ingredients/add">Create New Ingredient</Button>
+                <Button className='right floated' 
+                        as={Link} to="/ingredients/add"
+                        primary
+                        >Create New Ingredient</Button>
                 <IngredientShow />
-            </div>
+            </Container>
         );
     }
 
