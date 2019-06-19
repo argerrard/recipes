@@ -9,7 +9,7 @@ class IngredientForm extends React.Component {
         this.props.onSubmit(formValues);
     }
 
-    renderErrors = () => {
+    renderValidationErrors = () => {
         if (!this.props.fieldInfo) {
             return null;
         }
@@ -51,6 +51,17 @@ class IngredientForm extends React.Component {
         );
     }
 
+    renderApiErrors() {
+        if (!this.props.apiErrors) return null;
+
+        return (
+            <Message negative 
+                header={this.props.errorHeader} 
+                content={this.props.apiErrors}
+            />
+        );
+    }
+
     render() {
         return (
             <Form onSubmit={this.props.handleSubmit(this.onSubmit)}>
@@ -75,7 +86,8 @@ class IngredientForm extends React.Component {
                             label="Fat (g)" />
                 </Form.Group>
                 <Form.Button primary content='Submit' />
-                {this.renderErrors()}
+                {this.renderValidationErrors()}
+                {this.renderApiErrors()}
             </Form>
         );
     }

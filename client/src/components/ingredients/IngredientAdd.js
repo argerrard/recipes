@@ -2,9 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import IngredientForm from './IngredientForm';
-import { addIngredient } from '../../actions/ingredients';
+import { addIngredient, dismissIngredientInfo } from '../../actions/ingredients';
 
 class IngredientAdd extends React.Component {
+
+    componentDidMount() {
+        this.props.dismissIngredientInfo();
+    }
 
     onSubmit = (formValues) => {
         this.props.addIngredient(formValues);
@@ -13,11 +17,21 @@ class IngredientAdd extends React.Component {
     render() {
         return (
             <div>
-                <IngredientForm onSubmit={this.onSubmit} />
+                <IngredientForm 
+                    onSubmit={this.onSubmit} 
+                    errorHeader='There was a problem adding the ingredient.'
+                    apiErrors={this.props.uploadError}
+                />
             </div>
         );
     }
 
 }
 
-export default connect(null, {addIngredient})(IngredientAdd);
+const mapStateToProps = (state) => {
+    return {
+        uploadError: state.ingredient.uploadedIngredient.errors
+    };
+};
+
+export default connect(mapStateToProps, {addIngredient, dismissIngredientInfo})(IngredientAdd);

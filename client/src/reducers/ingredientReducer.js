@@ -1,7 +1,7 @@
 import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
-    DISMISS_INGREDIENT_ADD
+    DISMISS_INGREDIENT_INFO
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,7 +22,14 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                     ingredient: action.payload
                 } };
 
-        case DISMISS_INGREDIENT_ADD:
+        case ADD_INGREDIENT_ERROR:
+            return {...state, uploadedIngredient: {
+                success: false,
+                errors: action.payload,
+                ingredient: null
+            }};
+
+        case DISMISS_INGREDIENT_INFO:
             return { ...state, uploadedIngredient: {
                 success: false,
                 errors: '',

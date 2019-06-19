@@ -3,13 +3,13 @@ import { Button, Message, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { dismissIngredientAdd } from '../../actions/ingredients';
+import { dismissIngredientInfo } from '../../actions/ingredients';
 
 
 class IngredientList extends React.Component {
 
     componentWillUnmount() {
-        this.props.dismissIngredientAdd();
+        this.props.dismissIngredientInfo();
     }
 
     renderSuccess() {
@@ -19,7 +19,7 @@ class IngredientList extends React.Component {
                 <Grid>
                     <Grid.Column width={4} />
                     <Grid.Column width={8}>
-                        <Message positive onDismiss={this.props.dismissIngredientAdd}>
+                        <Message positive onDismiss={this.props.dismissIngredientInfo}>
                             <Message.Header>Success!</Message.Header>
                             <p>{this.props.uploadedIngredient.name} was successfully added to our list of ingredients.</p>
                         </Message>
@@ -50,4 +50,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {dismissIngredientAdd})(IngredientList);
+export default connect(mapStateToProps, {dismissIngredientInfo})(IngredientList);

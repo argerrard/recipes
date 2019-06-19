@@ -6,7 +6,7 @@ import {
     EDIT_INGREDIENT,
     DELETE_INGREDIENT,
     ADD_INGREDIENT_ERROR,
-    DISMISS_INGREDIENT_ADD
+    DISMISS_INGREDIENT_INFO
 } from '../types';
 
 
@@ -25,14 +25,17 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
         history.push('/ingredients');
 
     }).catch(error => {
+
+        const error_text = error.data ? error.data : 'Could not contact the server.';
+
         dispatch({
             type: ADD_INGREDIENT_ERROR,
-            payload: error.data
+            payload: error_text
         });
     });
 }
 
 //Action to dismiss any notifications about successful ingredient additions
-export const dismissIngredientAdd = () => {
-    return { type: DISMISS_INGREDIENT_ADD };
+export const dismissIngredientInfo = () => {
+    return { type: DISMISS_INGREDIENT_INFO };
 }
