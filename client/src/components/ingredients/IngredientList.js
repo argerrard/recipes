@@ -3,6 +3,7 @@ import { Button, Message, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import IngredientShow from './IngredientShow';
 import { dismissIngredientInfo } from '../../actions/ingredients';
 
 
@@ -37,6 +38,7 @@ class IngredientList extends React.Component {
             <div>
                 {this.renderSuccess()}
                 <Button as={Link} to="/ingredients/add">Create New Ingredient</Button>
+                <IngredientShow />
             </div>
         );
     }
