@@ -1,7 +1,9 @@
 import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
-    DISMISS_INGREDIENT_INFO
+    DISMISS_INGREDIENT_INFO,
+    FETCH_INGREDIENTS,
+    FETCH_INGREDIENTS_ERROR
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -9,7 +11,8 @@ const INITIAL_STATE = {
         success: false,
         errors: '',
         ingredient: null
-    }
+    },
+    ingredientList: []
 };
 
 const ingredientReducer = (state=INITIAL_STATE, action) => {
@@ -35,6 +38,11 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 errors: '',
                 ingredient: null
             }};
+
+        case FETCH_INGREDIENTS:
+            return {
+                ...state, ingredientList: action.payload
+            };
 
         default:
             return state;

@@ -4,10 +4,14 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import IngredientShow from './IngredientShow';
-import { dismissIngredientInfo } from '../../actions/ingredients';
+import { dismissIngredientInfo, fetchIngredients } from '../../actions/ingredients';
 
 
 class IngredientList extends React.Component {
+
+    componentDidMount() {
+        this.props.fetchIngredients('test');
+    }
 
     componentWillUnmount() {
         this.props.dismissIngredientInfo();
@@ -55,4 +59,5 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {dismissIngredientInfo})(IngredientList);
+export default connect(mapStateToProps, 
+    {dismissIngredientInfo, fetchIngredients})(IngredientList);

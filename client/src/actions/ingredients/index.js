@@ -6,7 +6,9 @@ import {
     EDIT_INGREDIENT,
     DELETE_INGREDIENT,
     ADD_INGREDIENT_ERROR,
-    DISMISS_INGREDIENT_INFO
+    DISMISS_INGREDIENT_INFO,
+    FETCH_INGREDIENTS,
+    FETCH_INGREDIENTS_ERROR
 } from '../types';
 
 
@@ -33,6 +35,26 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
             payload: error_text
         });
     });
+}
+
+export const fetchIngredients = (query) => (dispatch, getState) => {
+
+    axios.get('/api/ingredients/')
+    .then(response => {
+        dispatch({
+            type: FETCH_INGREDIENTS,
+            payload: response.data.ingredients
+        });
+    })
+    .catch(error => {
+        const error_text = error.data ? error.data : 'Could not fetch ingredients from the server';
+
+        dispatch({
+            type: FETCH_INGREDIENTS_ERROR,
+            payload: error_text
+        });
+    });
+
 }
 
 //Action to dismiss any notifications about successful ingredient additions
