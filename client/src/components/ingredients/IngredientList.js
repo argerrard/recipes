@@ -1,11 +1,8 @@
 import React from 'react';
-import { Button, Message, Grid, Container } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Item, Grid, Icon, Container } from 'semantic-ui-react';
+import {connect} from 'react-redux';
 
-import IngredientShow from './IngredientShow';
-import { dismissIngredientInfo, fetchIngredients } from '../../actions/ingredients';
-
+import { fetchIngredients } from '../../actions/ingredients';
 
 class IngredientList extends React.Component {
 
@@ -13,40 +10,55 @@ class IngredientList extends React.Component {
         this.props.fetchIngredients('test');
     }
 
-    componentWillUnmount() {
-        this.props.dismissIngredientInfo();
+    renderList = () => {
+        return this.props.ingredientList.map(ingredient => {
+            return this.renderItem(ingredient);
+        });
     }
 
-    renderSuccess() {
-
-        if (this.props.uploadSuccess) {
-            return (
-                <Grid>
-                    <Grid.Column width={4} />
-                    <Grid.Column width={8}>
-                        <Message positive onDismiss={this.props.dismissIngredientInfo}>
-                            <Message.Header>Success!</Message.Header>
-                            <p>{this.props.uploadedIngredient.name} was successfully added to our list of ingredients.</p>
-                        </Message>
-                    </Grid.Column>
-                    <Grid.Column width={4} />
-                </Grid>
-            );
-        }
-
-        return null;
-    }
+    renderItem = (ingredient) => {
+        console.log(ingredient);
+        return (
+                <Item key={ingredient.id}>
+                    <Item.Content>
+                        <Item.Header>{ingredient.name}</Item.Header>
+                        <Item.Meta>
+                            Serving: {ingredient.servingsize} {ingredient.measurementtype}
+                        </Item.Meta>
+                        <Item.Description>
+                            <Grid>
+                                <Grid.Row>
+                                    <Grid.Column width={3}>
+                                        Calories: {Math.round(ingredient.calories)}
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        Fat: {Math.round(ingredient.fat*10)/10} g
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        Protein: {Math.round(ingredient.protein*10)/10} g
+                                    </Grid.Column>
+                                    <Grid.Column width={5}>
+                                        Carbs: {Math.round(ingredient.carbs * 10)/10} g
+                                    </Grid.Column>
+                                    <Grid.Column width={1}>
+                                        <Icon color='blue' name="edit" />
+                                    </Grid.Column>
+                                    <Grid.Column width={1}>
+                                        <Icon color='red' name="delete" />
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
+                        </Item.Description>
+                    </Item.Content>
+                </Item>
+        );
+    } 
 
     render() {
         return (
-            <Container>
-                {this.renderSuccess()}
-                <Button className='right floated' 
-                        as={Link} to="/ingredients/add"
-                        primary
-                        >Create New Ingredient</Button>
-                <IngredientShow />
-            </Container>
+                <Item.Group divided>
+                    {this.renderList()}
+                </Item.Group>
         );
     }
 
@@ -54,10 +66,8 @@ class IngredientList extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        uploadSuccess: state.ingredient.uploadedIngredient.success,
-        uploadedIngredient: state.ingredient.uploadedIngredient.ingredient
+        ingredientList: state.ingredient.ingredientList
     };
-};
+}
 
-export default connect(mapStateToProps, 
-    {dismissIngredientInfo, fetchIngredients})(IngredientList);
+export default connect(mapStateToProps, {fetchIngredients})(IngredientList);
