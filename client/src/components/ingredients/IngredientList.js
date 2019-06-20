@@ -1,5 +1,5 @@
 import React from 'react';
-import { Item, Grid, Icon, Container } from 'semantic-ui-react';
+import { Item, Grid, Icon } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
 import { fetchIngredients } from '../../actions/ingredients';
@@ -17,7 +17,6 @@ class IngredientList extends React.Component {
     }
 
     renderItem = (ingredient) => {
-        console.log(ingredient);
         return (
                 <Item key={ingredient.id}>
                     <Item.Content>

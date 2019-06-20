@@ -3,8 +3,6 @@ import axios from 'axios';
 import history from '../../history';
 import {
     ADD_INGREDIENT,
-    EDIT_INGREDIENT,
-    DELETE_INGREDIENT,
     ADD_INGREDIENT_ERROR,
     DISMISS_INGREDIENT_INFO,
     FETCH_INGREDIENTS,
