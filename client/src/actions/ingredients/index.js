@@ -6,7 +6,9 @@ import {
     ADD_INGREDIENT_ERROR,
     DISMISS_INGREDIENT_INFO,
     FETCH_INGREDIENTS,
-    FETCH_INGREDIENTS_ERROR
+    FETCH_INGREDIENTS_ERROR,
+    DELETE_INGREDIENT_ERROR,
+    DELETE_INGREDIENT
 } from '../types';
 
 
@@ -49,6 +51,26 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
 
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
+            payload: error_text
+        });
+    });
+
+}
+
+export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
+
+    axios.delete(`/api/ingredients/${ingredientId}`)
+    .then(response => {
+        dispatch({
+            type: DELETE_INGREDIENT,
+            payload: response.data.message
+        })
+    })
+    .catch(error => {
+        const error_text = error.data ? error.data.message : 'Could not delete ingredient from the server';
+        
+        dispatch({
+            type: DELETE_INGREDIENT_ERROR,
             payload: error_text
         });
     });
