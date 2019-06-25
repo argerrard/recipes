@@ -11,8 +11,8 @@ class IngredientList extends React.Component {
     }
 
     renderList = () => {
-        return Object.keys(this.props.ingredientList).map(key => {
-            return this.renderItem(this.props.ingredientList[key]);
+        return this.props.ingredientList.map(ingredient => {
+            return this.renderItem(ingredient);
         });
     }
 
@@ -65,7 +65,7 @@ class IngredientList extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        ingredientList: state.ingredient.ingredientList
+        ingredientList: Object.values(state.ingredient.ingredientList)
     };
 }
 
