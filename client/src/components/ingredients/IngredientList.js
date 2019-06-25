@@ -3,8 +3,11 @@ import { Item, Grid, Icon } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
 import { fetchIngredients } from '../../actions/ingredients';
+import DefaultModal from '../DefaultModal';
 
 class IngredientList extends React.Component {
+
+    state = {  }
 
     componentDidMount() {
         this.props.fetchIngredients('test');
@@ -14,6 +17,10 @@ class IngredientList extends React.Component {
         return this.props.ingredientList.map(ingredient => {
             return this.renderItem(ingredient);
         });
+    }
+
+    deleteIngredient = (deleteId) => {
+        
     }
 
     renderItem = (ingredient) => {
@@ -43,7 +50,21 @@ class IngredientList extends React.Component {
                                         <Icon color='blue' name="edit" />
                                     </Grid.Column>
                                     <Grid.Column width={1}>
-                                        <Icon color='red' name="delete" />
+                                        <DefaultModal 
+                                            modalTrigger={
+                                                <Icon color='red' name="delete"
+                                                onClick={() => this.deleteIngredient(ingredient.id)} 
+                                                style={{ cursor: 'pointer' }} />
+                                            }
+                                            icon={'trash alternate'}
+                                            headerMessage={'Ingredient Delete'}
+                                            contentMessage={
+                                                'Are you sure you want to delete this ingredient?'
+                                            }
+                                            size={'tiny'} button1Message={"No"} button2Message={"Delete"}
+                                            button1Icon='remove' button2Icon='trash'
+                                            button1Color='blue' button2Color='red'
+                                        />
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
