@@ -57,13 +57,15 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
 
 }
 
+//Creates an action to delete an ingredient from the server
+//TODO: add authentication so that only the user that created the ingredient can delete it
 export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
 
     axios.delete(`/api/ingredients/${ingredientId}`)
     .then(response => {
         dispatch({
             type: DELETE_INGREDIENT,
-            payload: response.data.message
+            payload: ingredientId
         })
     })
     .catch(error => {

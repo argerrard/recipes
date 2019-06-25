@@ -11,8 +11,8 @@ class IngredientList extends React.Component {
     }
 
     renderList = () => {
-        return this.props.ingredientList.map(ingredient => {
-            return this.renderItem(ingredient);
+        return Object.keys(this.props.ingredientList).map(key => {
+            return this.renderItem(this.props.ingredientList[key]);
         });
     }
 

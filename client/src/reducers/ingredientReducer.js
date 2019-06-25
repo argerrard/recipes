@@ -1,8 +1,12 @@
+import _ from 'lodash';
+
 import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
     DISMISS_INGREDIENT_INFO,
-    FETCH_INGREDIENTS
+    FETCH_INGREDIENTS,
+    DELETE_INGREDIENT,
+    DELETE_INGREDIENT_ERROR
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -40,7 +44,13 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
 
         case FETCH_INGREDIENTS:
             return {
-                ...state, ingredientList: action.payload
+                ...state, ingredientList: _.mapKeys(action.payload, 'id')
+            };
+
+        case DELETE_INGREDIENT:
+
+            return {
+                ...state, ingredientList: _.omit(state.ingredientList, action.payload)
             };
 
         default:
