@@ -2,12 +2,10 @@ import React from 'react';
 import { Item, Grid, Icon } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
-import { fetchIngredients } from '../../actions/ingredients';
+import { fetchIngredients, deleteIngredient } from '../../actions/ingredients';
 import DefaultModal from '../DefaultModal';
 
 class IngredientList extends React.Component {
-
-    state = {  }
 
     componentDidMount() {
         this.props.fetchIngredients('test');
@@ -20,7 +18,7 @@ class IngredientList extends React.Component {
     }
 
     deleteIngredient = (deleteId) => {
-        
+        this.props.deleteIngredient(deleteId);
     }
 
     renderItem = (ingredient) => {
@@ -53,7 +51,6 @@ class IngredientList extends React.Component {
                                         <DefaultModal 
                                             modalTrigger={
                                                 <Icon color='red' name="delete"
-                                                onClick={() => this.deleteIngredient(ingredient.id)} 
                                                 style={{ cursor: 'pointer' }} />
                                             }
                                             icon={'trash alternate'}
@@ -64,6 +61,7 @@ class IngredientList extends React.Component {
                                             size={'tiny'} button1Message={"No"} button2Message={"Delete"}
                                             button1Icon='remove' button2Icon='trash'
                                             button1Color='blue' button2Color='red'
+                                            button2OnClick={() => this.deleteIngredient(ingredient.id)}
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
@@ -90,4 +88,4 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps, {fetchIngredients})(IngredientList);
+export default connect(mapStateToProps, {fetchIngredients, deleteIngredient})(IngredientList);
