@@ -9,6 +9,7 @@ import Login from './auth/Login';
 import SignUp from './auth/SignUp';
 import IngredientAdd from './ingredients/IngredientAdd';
 import IngredientHome from './ingredients/IngredientHome';
+import IngredientEdit from './ingredients/IngredientEdit';
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
                         <Route path="/signup" exact component={SignUp} />
                         <Route path="/ingredients" exact component={IngredientHome} />
                         <Route path="/ingredients/add" exact component={IngredientAdd} />
+                        <Route path="/ingredients/edit/:id" exact component={IngredientEdit} />
                     </Switch>
                     </Container>
             </Router>
