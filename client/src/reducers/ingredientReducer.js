@@ -6,7 +6,8 @@ import {
     DISMISS_INGREDIENT_INFO,
     FETCH_INGREDIENTS,
     DELETE_INGREDIENT,
-    DELETE_INGREDIENT_ERROR
+    FETCH_INGREDIENT,
+    FETCH_INGREDIENTS_ERROR
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -15,7 +16,8 @@ const INITIAL_STATE = {
         errors: '',
         ingredient: null
     },
-    ingredientList: []
+    ingredientList: {},
+    errors: ''
 };
 
 const ingredientReducer = (state=INITIAL_STATE, action) => {
@@ -26,7 +28,8 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                     success: true,
                     errors: '',
                     ingredient: action.payload
-                } };
+                }
+            };
 
         case ADD_INGREDIENT_ERROR:
             return {...state, uploadedIngredient: {
@@ -41,16 +44,33 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 errors: '',
                 ingredient: null
             }};
+        
+        case FETCH_INGREDIENT:
+
+            return {
+                ...state, 
+                ingredientList: {...state.ingredientList, [action.payload.id]: action.payload},
+                errors: ''
+            }
 
         case FETCH_INGREDIENTS:
             return {
-                ...state, ingredientList: _.mapKeys(action.payload, 'id')
+                ...state, ingredientList: _.mapKeys(action.payload, 'id'),
+                errors: ''
             };
 
         case DELETE_INGREDIENT:
 
             return {
-                ...state, ingredientList: _.omit(state.ingredientList, action.payload)
+                ...state, 
+                ingredientList: _.omit(state.ingredientList, action.payload),
+                errors: ''
+            };
+        
+        case FETCH_INGREDIENTS_ERROR:
+            return {
+                ...state,
+                errors: action.payload
             };
 
         default:

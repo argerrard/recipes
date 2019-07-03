@@ -5,6 +5,7 @@ import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
     DISMISS_INGREDIENT_INFO,
+    FETCH_INGREDIENT,
     FETCH_INGREDIENTS,
     FETCH_INGREDIENTS_ERROR,
     DELETE_INGREDIENT_ERROR,
@@ -49,6 +50,25 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
     .catch(error => {
         const error_text = error.data ? error.data : 'Could not fetch ingredients from the server';
 
+        dispatch({
+            type: FETCH_INGREDIENTS_ERROR,
+            payload: error_text
+        });
+    });
+
+}
+
+export const fetchIngredient = (ingredientId) => (dispatch, getState) => {
+
+    axios.get(`/api/ingredients/${ingredientId}`)
+    .then(response => {
+        dispatch({
+            type: FETCH_INGREDIENT,
+            payload: response.data
+        });
+    })
+    .catch(error => {
+        const error_text = error.data ? error.data : 'There was a problem loading the ingredient.';
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
             payload: error_text

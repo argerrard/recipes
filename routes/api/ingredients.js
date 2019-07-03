@@ -40,7 +40,6 @@ router.get('/:id', (req, res) => {
 
         //Return not found if no ID is found
         if (result.rows.length === 0) {
-            console.log("no")
             return res.status(404).json({ error: "Ingredient was not found." });
         }
 
