@@ -3,6 +3,7 @@ import { Message } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
 import {fetchIngredient} from '../../actions/ingredients';
+import IngredientForm from './IngredientForm';
 
 class IngredientEdit extends React.Component {
 
@@ -28,12 +29,26 @@ class IngredientEdit extends React.Component {
         );
     }
 
+    onSubmit = () => {
+
+    }
+
     render() {
         if (!this.props.ingredient && this.props.errorMessage) {
             return this.renderError();
         } else if (!this.props.ingredient) return null;
 
-        return <div>IngredientEdit</div>;
+        return (
+            <div>
+                <IngredientForm 
+                    headerTitle={`Editing Ingredient: ${this.props.ingredient.name}`}
+                    onSubmit={this.onSubmit} 
+                    errorHeader='There was a problem editing the ingredient.'
+                    apiErrors={this.props.uploadError}
+                    editIngredient={this.props.ingredient}
+                />
+            </div>
+        );
     }
 
 }

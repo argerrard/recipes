@@ -14,7 +14,7 @@ class IngredientForm extends React.Component {
             return null;
         }
 
-        const formFields = ['name', 'servingSize', 'measurementType', 'calories', 
+        const formFields = ['name', 'servingsize', 'measurementtype', 'calories', 
                             'carbs', 'protein', 'fat'];
         const errors = [];
 
@@ -78,9 +78,9 @@ class IngredientForm extends React.Component {
                     component={this.renderInput} type="text" />
                 
                 <Form.Group widths='equal'>
-                    <Field name="servingSize" component={this.renderInput}
+                    <Field name="servingsize" component={this.renderInput}
                             label="Serving Size" />
-                    <Field name="measurementType" component={this.renderInput}
+                    <Field name="measurementtype" component={this.renderInput}
                             label="Measurement Type" />
                 </Form.Group>
                 <Form.Group widths='equal'>
@@ -110,15 +110,15 @@ const validate = values => {
     if (!values.name) errors.name = "Please choose an ingredient name.";
 
     //Serving Size validation
-    if (!values.servingSize){
-        errors.servingSize = "Please choose a serving size.";
-    } else if (isNaN(values.servingSize)) errors.servingSize = "Serving size must be numeric.";
+    if (!values.servingsize){
+        errors.servingsize = "Please choose a serving size.";
+    } else if (isNaN(values.servingsize)) errors.servingsize = "Serving size must be numeric.";
 
     //Measurement validation
-    if (!values.measurementType) {
-        errors.measurementType = "Please specify a form of measurement.";
-    } else if (!isNaN(values.measurementType)) {
-        errors.measurementType = "Measurement types should be words (ie: cups, spoonful, etc.)";
+    if (!values.measurementtype) {
+        errors.measurementtype = "Please specify a form of measurement.";
+    } else if (!isNaN(values.measurementtype)) {
+        errors.measurementtype = "Measurement types should be words (ie: cups, spoonful, etc.)";
     }
 
     //Validation for nutrient types
@@ -137,14 +137,19 @@ const validate = values => {
 
 const wrappedForm = reduxForm({ form: 'ingredient', validate })(IngredientForm);
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
     var syncErrors = {};
     var errorFields = {};
     if (state.form.ingredient) {
         syncErrors = state.form.ingredient.syncErrors;
         errorFields = state.form.ingredient.fields;
     }
-    return { formErrors: syncErrors, fieldInfo: errorFields };
+
+
+    return { formErrors: syncErrors, 
+            fieldInfo: errorFields,
+            initialValues: ownProps.editIngredient
+        };
 
 };
 
