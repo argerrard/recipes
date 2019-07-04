@@ -1,7 +1,8 @@
 import React from 'react';
+import { Message } from 'semantic-ui-react';
+import {connect} from 'react-redux';
 
 import {fetchIngredient} from '../../actions/ingredients';
-import {connect} from 'react-redux';
 
 class IngredientEdit extends React.Component {
 
@@ -18,16 +19,19 @@ class IngredientEdit extends React.Component {
         const message = this.props.errorMessage ? this.props.errorMessage : 'There was a problem loading the ingredient.';
 
         return (
-            <div>
-                {message}
-            </div>
+            <Message negative>
+                <Message.Header>
+                    Unfortunately, you can't edit this ingredient right now.
+                </Message.Header>
+                <p>{message}</p>
+            </Message>
         );
     }
 
     render() {
-        if (!this.props.ingredient) {
+        if (!this.props.ingredient && this.props.errorMessage) {
             return this.renderError();
-        }
+        } else if (!this.props.ingredient) return null;
 
         return <div>IngredientEdit</div>;
     }
