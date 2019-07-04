@@ -1,6 +1,7 @@
 import React from 'react';
 import { Item, Grid, Icon } from 'semantic-ui-react';
 import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { fetchIngredients, deleteIngredient } from '../../actions/ingredients';
 import DefaultModal from '../DefaultModal';
@@ -45,7 +46,9 @@ class IngredientList extends React.Component {
                                         Carbs: {Math.round(ingredient.carbs * 10)/10} g
                                     </Grid.Column>
                                     <Grid.Column width={1}>
-                                        <Icon color='blue' name="edit" />
+                                        <Link to={`/ingredients/edit/${ingredient.id}`}>
+                                            <Icon color='blue' name="edit" />
+                                        </Link>
                                     </Grid.Column>
                                     <Grid.Column width={1}>
                                         <DefaultModal 
