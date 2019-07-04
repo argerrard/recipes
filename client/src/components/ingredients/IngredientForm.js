@@ -64,7 +64,15 @@ class IngredientForm extends React.Component {
 
     render() {
         return (
-            <Form onSubmit={this.props.handleSubmit(this.onSubmit)}>
+            <div>
+            <Message
+                attached
+                header={this.props.headerTitle}
+                content={this.props.headerContent}
+            />
+            <Form
+                className="attached fluid segment" 
+                onSubmit={this.props.handleSubmit(this.onSubmit)}>
                 <Field name="name" 
                     label="Ingredient Name" 
                     component={this.renderInput} type="text" />
@@ -89,6 +97,7 @@ class IngredientForm extends React.Component {
                 {this.renderValidationErrors()}
                 {this.renderApiErrors()}
             </Form>
+            </div>
         );
     }
 

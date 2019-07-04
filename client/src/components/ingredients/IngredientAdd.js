@@ -18,6 +18,7 @@ class IngredientAdd extends React.Component {
         return (
             <div>
                 <IngredientForm 
+                    headerTitle='Add an Ingredient'
                     onSubmit={this.onSubmit} 
                     errorHeader='There was a problem adding the ingredient.'
                     apiErrors={this.props.uploadError}
