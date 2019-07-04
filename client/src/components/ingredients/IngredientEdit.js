@@ -10,8 +10,24 @@ class IngredientEdit extends React.Component {
         this.props.fetchIngredient(this.props.match.params.id);
     }
 
+    //This method is called when an ingredient is not loaded for editing
+    //This can occur if the user does not own the ingredient or if the
+    //the fetch to the API returns an error.
+    renderError() {
+        //Default error message if one isn't in state
+        const message = this.props.errorMessage ? this.props.errorMessage : 'There was a problem loading the ingredient.';
+
+        return (
+            <div>
+                {message}
+            </div>
+        );
+    }
+
     render() {
-        if (!this.props.ingredient) return null;
+        if (!this.props.ingredient) {
+            return this.renderError();
+        }
 
         return <div>IngredientEdit</div>;
     }
@@ -22,7 +38,8 @@ const mapStateToProps = (state, ownProps) => {
     const ingredientId = ownProps.match.params.id
 
     return {
-        ingredient: state.ingredient.ingredientList[ingredientId]
+        ingredient: state.ingredient.ingredientList[ingredientId],
+        errorMessage: state.ingredient.errors
     }
 }
 
