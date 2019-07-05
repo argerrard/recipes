@@ -4,6 +4,7 @@ import { Dropdown, Button, Menu, Icon } from 'semantic-ui-react';
 
 class Header extends React.Component {
 
+    //Helper method to render the header when a user is not logged in
     renderDefault() {
         return (
             <>
@@ -17,6 +18,7 @@ class Header extends React.Component {
         );
     }
 
+    //Helper method to render the header when a user is logged in
     renderLoggedIn() {
         return(
             <>

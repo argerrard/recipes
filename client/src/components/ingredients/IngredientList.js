@@ -8,6 +8,8 @@ import DefaultModal from '../DefaultModal';
 
 class IngredientList extends React.Component {
 
+    //Fetch the ingredients to be listed once mounted
+    //TODO: allow a query to be passed in to specify different types of fetches
     componentDidMount() {
         this.props.fetchIngredients('test');
     }
@@ -18,6 +20,7 @@ class IngredientList extends React.Component {
         });
     }
 
+    //Action creator is called if the user clicks the red X button to delete
     deleteIngredient = (deleteId) => {
         this.props.deleteIngredient(deleteId);
     }
@@ -85,6 +88,7 @@ class IngredientList extends React.Component {
 
 }
 
+// ingredientList: the list of ingredients to be displayed
 const mapStateToProps = (state) => {
     return {
         ingredientList: Object.values(state.ingredient.ingredientList)

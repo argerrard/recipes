@@ -6,10 +6,12 @@ import { addIngredient, dismissIngredientInfo } from '../../actions/ingredients'
 
 class IngredientAdd extends React.Component {
 
+    //On mounting, dismiss any previous ingredient success messages so they no longer appear
     componentDidMount() {
         this.props.dismissIngredientInfo();
     }
 
+    //Calls the action creator to create the ingredient on submit
     onSubmit = (formValues) => {
         this.props.addIngredient(formValues);
     }
@@ -29,6 +31,7 @@ class IngredientAdd extends React.Component {
 
 }
 
+// uploadError: errors provided by the server if the ingredient add is not successful
 const mapStateToProps = (state) => {
     return {
         uploadError: state.ingredient.uploadedIngredient.errors

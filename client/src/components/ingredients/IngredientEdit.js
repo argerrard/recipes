@@ -2,7 +2,7 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
-import {fetchIngredient, editIngredient} from '../../actions/ingredients';
+import {fetchIngredient, editIngredient, dismissIngredientInfo } from '../../actions/ingredients';
 import IngredientForm from './IngredientForm';
 
 class IngredientEdit extends React.Component {
@@ -30,6 +30,7 @@ class IngredientEdit extends React.Component {
         );
     }
 
+    //When the edit form is submitted, call the action creator for editing the ingredient
     onSubmit = (formValues) => {
         this.props.editIngredient(this.props.match.params.id, formValues);
     }
@@ -54,13 +55,19 @@ class IngredientEdit extends React.Component {
 
 }
 
+// ingredient: the ingredient being edited (required to populate form info and inform server)
+//             of what ingredient is being edited
+// errorMessage: error message to be displayed if the fetch is unsuccessful/user doesn't have authentication
+// uploadError: errors returned by the api if the user has authorization but there was an api problem
 const mapStateToProps = (state, ownProps) => {
     const ingredientId = ownProps.match.params.id
 
     return {
         ingredient: state.ingredient.ingredientList[ingredientId],
-        errorMessage: state.ingredient.errors
+        errorMessage: state.ingredient.errors,
+        uploadError: state.ingredient.uploadedIngredient.errors
     }
 }
 
-export default connect(mapStateToProps, {fetchIngredient, editIngredient})(IngredientEdit);
+export default connect(mapStateToProps, 
+    {fetchIngredient, editIngredient, dismissIngredientInfo})(IngredientEdit);

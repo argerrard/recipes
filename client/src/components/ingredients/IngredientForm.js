@@ -9,6 +9,7 @@ class IngredientForm extends React.Component {
         this.props.onSubmit(formValues);
     }
 
+    //Helper function to render validation errors at the bottom of the form
     renderValidationErrors = () => {
         if (!this.props.fieldInfo) {
             return null;
@@ -41,6 +42,9 @@ class IngredientForm extends React.Component {
         );
     }
 
+    //Renders each individual input on the form
+    //The input is marked with error status if the user has accessed it at least once
+    //and the resulting form value is not correct
     renderInput = ({ input, label, meta }) => {
 
         const errorStatus = meta.error && meta.touched ? true : false;
@@ -51,6 +55,7 @@ class IngredientForm extends React.Component {
         );
     }
 
+    //render any errors returned from API calls
     renderApiErrors() {
         if (!this.props.apiErrors) return null;
 

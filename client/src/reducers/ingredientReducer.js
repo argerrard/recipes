@@ -25,6 +25,8 @@ const INITIAL_STATE = {
 
 const ingredientReducer = (state=INITIAL_STATE, action) => {
     switch(action.type) {
+        //When a new ingredient is added, update the uploadedIngredient info to accurately
+        //portray the success message
         case ADD_INGREDIENT:
             return { ...state, 
                 uploadedIngredient: {
@@ -35,6 +37,7 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 }
             };
 
+        //If there is an error adding, upload the error message based on the payload
         case ADD_INGREDIENT_ERROR:
             return {...state, uploadedIngredient: {
                 success: false,
@@ -43,6 +46,7 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 type: 'add'
             }};
 
+        //Erase any outstanding messages shown to the user
         case DISMISS_INGREDIENT_INFO:
             return { ...state, uploadedIngredient: {
                 success: false,
@@ -51,6 +55,7 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 type: ''
             }};
         
+        //Fetch a single ingredient and add it to the state
         case FETCH_INGREDIENT:
 
             return {
@@ -59,12 +64,15 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 errors: ''
             }
 
+        //Add all fetched ingredients to the state
         case FETCH_INGREDIENTS:
             return {
                 ...state, ingredientList: _.mapKeys(action.payload, 'id'),
                 errors: ''
             };
         
+        //Edit the ingredient in the ingredient list and update the uploaded ingredient info
+        //so that the popup success message is displayed
         case EDIT_INGREDIENT:
             return {
                 ...state, 
@@ -77,12 +85,19 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 }
             };
         
+        //Update the error state so that the user can see the error returned by the api
         case EDIT_INGREDIENT_ERROR:
             return {
                 ...state,
-                errors: action.payload
+                uploadedIngredient: {
+                    success: false,
+                    errors: action.payload,
+                    ingredient: null,
+                    type: 'edit'
+                }
             };
 
+        //Remove the ingredient from state
         case DELETE_INGREDIENT:
 
             return {
@@ -91,6 +106,7 @@ const ingredientReducer = (state=INITIAL_STATE, action) => {
                 errors: ''
             };
         
+        //Update the error state so the user can see the error message relating to the fetch
         case FETCH_INGREDIENTS_ERROR:
             return {
                 ...state,
