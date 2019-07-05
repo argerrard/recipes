@@ -40,6 +40,8 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
     });
 }
 
+//Creates an action to fetch ingredients according to the specified query
+//TODO: currently just performs a fetch of all, add code to implement the query
 export const fetchIngredients = (query) => (dispatch, getState) => {
 
     axios.get('/api/ingredients/')
@@ -60,6 +62,8 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
 
 }
 
+//Fetches a single ingredient - used to ensure our component has the information required
+//for editing
 export const fetchIngredient = (ingredientId) => (dispatch, getState) => {
 
     axios.get(`/api/ingredients/${ingredientId}`)
