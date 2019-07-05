@@ -5,6 +5,8 @@ import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
     DISMISS_INGREDIENT_INFO,
+    EDIT_INGREDIENT,
+    EDIT_INGREDIENT_ERROR,
     FETCH_INGREDIENT,
     FETCH_INGREDIENTS,
     FETCH_INGREDIENTS_ERROR,
@@ -98,6 +100,33 @@ export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
     });
 
 }
+
+//Action to edit ingredient
+//TODO: add authentication so that only the user that created the ingredient can edit
+export const editIngredient = (ingredientId, ingredientValues) => (dispatch, getState) => {
+
+    axios.put(`/api/ingredients/${ingredientId}`, ingredientValues)
+    .then(response => {
+        dispatch({
+            type: EDIT_INGREDIENT,
+            payload: { ...ingredientValues, id: ingredientId}
+        });
+
+        //Route back to main ingredients page
+        history.push('/ingredients');
+    })
+    .catch(error => {
+        const error_text = error.data ? error.data.message : 'Could not connect to the server.';
+        
+        dispatch({
+            type: EDIT_INGREDIENT_ERROR,
+            payload: error_text
+        });
+    });
+
+
+}
+
 
 //Action to dismiss any notifications about successful ingredient additions
 export const dismissIngredientInfo = () => {

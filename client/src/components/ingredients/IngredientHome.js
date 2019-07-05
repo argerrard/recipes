@@ -14,15 +14,22 @@ class IngredientHome extends React.Component {
     }
 
     renderSuccess() {
+        var successMessage= '';
 
         if (this.props.uploadSuccess) {
+            if (this.props.uploadType === 'add') {
+                successMessage = `${this.props.uploadedIngredient.name} was successfully added to our list of ingredients.`;
+            } else if (this.props.uploadType === 'edit') {
+                successMessage = `${this.props.uploadedIngredient.name} was successfully updated.`;
+            }
+
             return (
                 <Grid>
                     <Grid.Column width={4} />
                     <Grid.Column width={8}>
                         <Message positive onDismiss={this.props.dismissIngredientInfo}>
                             <Message.Header>Success!</Message.Header>
-                            <p>{this.props.uploadedIngredient.name} was successfully added to our list of ingredients.</p>
+                            <p>{successMessage}</p>
                         </Message>
                     </Grid.Column>
                     <Grid.Column width={4} />
@@ -51,7 +58,8 @@ class IngredientHome extends React.Component {
 const mapStateToProps = (state) => {
     return {
         uploadSuccess: state.ingredient.uploadedIngredient.success,
-        uploadedIngredient: state.ingredient.uploadedIngredient.ingredient
+        uploadedIngredient: state.ingredient.uploadedIngredient.ingredient,
+        uploadType: state.ingredient.uploadedIngredient.type
     };
 };
 

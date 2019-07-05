@@ -2,13 +2,14 @@ import React from 'react';
 import { Message } from 'semantic-ui-react';
 import {connect} from 'react-redux';
 
-import {fetchIngredient} from '../../actions/ingredients';
+import {fetchIngredient, editIngredient} from '../../actions/ingredients';
 import IngredientForm from './IngredientForm';
 
 class IngredientEdit extends React.Component {
 
     //On component mount, fetch the ingredient to be displayed
     componentDidMount() {
+        this.props.dismissIngredientInfo();
         this.props.fetchIngredient(this.props.match.params.id);
     }
 
@@ -29,8 +30,8 @@ class IngredientEdit extends React.Component {
         );
     }
 
-    onSubmit = () => {
-
+    onSubmit = (formValues) => {
+        this.props.editIngredient(this.props.match.params.id, formValues);
     }
 
     render() {
@@ -62,4 +63,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, {fetchIngredient})(IngredientEdit);
+export default connect(mapStateToProps, {fetchIngredient, editIngredient})(IngredientEdit);

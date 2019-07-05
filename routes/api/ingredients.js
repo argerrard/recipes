@@ -64,17 +64,17 @@ router.post('/', (req, res) => {
 
     console.log(req.body);
 
-    const { name, userId, servingSize, 
-        measurementType, calories, protein, fat, carbs } = req.body;
+    const { name, userId, servingsize, 
+        measurementtype, calories, protein, fat, carbs } = req.body;
 
     // Validate that required parameters are present
-    if (!name || !userId || !servingSize || !measurementType || !calories ||
+    if (!name || !userId || !servingsize || !measurementtype || !calories ||
         !protein || !fat || !carbs) {
             return res.status(400).json({ error: "Required field is missing." });
     }
 
     // Validate that numeric fields are numbers
-    if ([userId, servingSize, calories, protein, fat, carbs].map((field) => {
+    if ([userId, servingsize, calories, protein, fat, carbs].map((field) => {
         if (isNaN(field)) return true;
         return false;
     }).includes(true)) {
@@ -82,9 +82,9 @@ router.post('/', (req, res) => {
     } 
 
     // User request passed validation, add to the database
-    const insertIngredientText = 'INSERT INTO Ingredient (name, uploaderId, servingSize, measurementType, '+
+    const insertIngredientText = 'INSERT INTO Ingredient (name, uploaderId, servingsize, measurementtype, '+
     'calories, protein, fat, carbs) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
-    const ingredientValues = [name, userId, servingSize, measurementType, calories, protein, fat, carbs];
+    const ingredientValues = [name, userId, servingsize, measurementtype, calories, protein, fat, carbs];
     
     db.query(insertIngredientText, ingredientValues, (err, result) => {
         if (err) {
@@ -94,7 +94,7 @@ router.post('/', (req, res) => {
 
         //Record was added successfully
         console.log(`User ${userId} created ingredient: ${name}`);
-        return res.status(201).json({ id: result.rows[0].id, name, userId, servingSize, measurementType, 
+        return res.status(201).json({ id: result.rows[0].id, name, userId, servingsize, measurementtype, 
             calories, protein, fat, carbs });
     });
 });
@@ -142,22 +142,22 @@ router.delete('/:id', (req, res) => {
 //TODO:     Confirm the user updating the request owns the ingredient
 router.put('/:id', (req, res) => {
     const id = req.params.id;
-    const { name, servingSize, 
-        measurementType, calories, protein, fat, carbs } = req.body;
+    const { name, servingsize, 
+        measurementtype, calories, protein, fat, carbs } = req.body;
 
     //Ensure ingredient id is numeric
     if (isNaN(id)) return res.status(400).json({ error: 'Ingredient id must be numeric.' });
 
     //Ensure the required parameters of the ingredient have been entered
-    if (!name || !servingSize || !measurementType || !calories ||
+    if (!name || !servingsize || !measurementtype || !calories ||
         !protein || !fat || !carbs) {
             return res.status(400).json({ error: "Required field is missing." });
     }
 
     //Update the ingredient record
-    const updateText = 'UPDATE Ingredient SET name = $1, servingSize = $2, measurementType = $3,' +
+    const updateText = 'UPDATE Ingredient SET name = $1, servingsize = $2, measurementtype = $3,' +
     'calories = $4, protein = $5, fat = $6, carbs = $7 WHERE id = $8;';
-    const updateValues = [name, servingSize, measurementType, calories, protein, fat, carbs, id];
+    const updateValues = [name, servingsize, measurementtype, calories, protein, fat, carbs, id];
 
     db.query(updateText, updateValues)
     .then(result => {
