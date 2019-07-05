@@ -60,7 +60,7 @@ class IngredientList extends React.Component {
                                                 style={{ cursor: 'pointer' }} />
                                             }
                                             icon={'trash alternate'}
-                                            headerMessage={'Ingredient Delete'}
+                                            headerMessage={`Ingredient Delete - ${ingredient.name}`}
                                             contentMessage={
                                                 'Are you sure you want to delete this ingredient?'
                                             }
