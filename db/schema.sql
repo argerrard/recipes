@@ -1,6 +1,7 @@
 CREATE TABLE AppUser (
     id SERIAL PRIMARY KEY,
-    email varchar(50) NOT NULL,
+    username varchar(30) NOT NULL UNIQUE,
+    email varchar(50) NOT NULL UNIQUE,
     password char(60) NOT NULL,
     registerDate DATE NOT NULL DEFAULT CURRENT_DATE
 );
