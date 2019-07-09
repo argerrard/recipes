@@ -27,8 +27,7 @@ router.post('/', async (req, res) => {
 
     //Send response indicating bad request if there are errors
     if (errors.length > 0) {
-        res.status(400).json({ errors });
-        return;
+        return res.status(400).json({ errors });
     }
 
     //Get the password hash from the database to authenticate login
@@ -40,8 +39,7 @@ router.post('/', async (req, res) => {
         id = result.rows[0].id;
     } catch (err) {
         errors.push('There was a problem validating user credentials.');
-        res.status(500).json({ errors });
-        return;
+        return res.status(500).json({ errors });
     }
 
     //Compare the hash of the provided password to the hash in the database
@@ -49,8 +47,7 @@ router.post('/', async (req, res) => {
     .then(isMatch => {
         if (!isMatch) {
             errors.push('Invalid credentials.');
-            res.status(401).json({ errors });
-            return;
+            return res.status(401).json({ errors });
         }
 
         //Password is valid, return a token to the user
@@ -61,8 +58,7 @@ router.post('/', async (req, res) => {
             (err, token) => {
                 if (err) {
                     errors.push('There was a problem logging in.');
-                    res.status(500).json({errors});
-                    return;
+                    return res.status(500).json({errors});
                 }
     
                 res.json({

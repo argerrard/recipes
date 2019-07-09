@@ -8,15 +8,13 @@ function auth(req, res, next) {
 
     //Ensure that token is sent with request
     if (!token) {
-        res.status(401).json({ errors: ['A JSON web token is required to access this route.'] });
-        return;
+        return res.status(401).json({ errors: ['A JSON web token is required to access this route.'] });
     }
 
     //Verify token
     jwt.verify(token, jwtSecret, (err, decoded) => {
         if (err) {
-            res.status(401).json({ errors: ['Invalid token.'] });
-            return;
+            return res.status(401).json({ errors: ['Invalid token.'] });
         }
 
         //If token is valid, call the next function and attach the user to the request

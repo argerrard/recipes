@@ -64,10 +64,7 @@ router.post('/', async (req, res) => {
 
     //Send Bad Request response if there are any (or multiple errors)
     if (errors.length > 0) {
-        res.status(400).json({
-            errors
-        });
-        return;
+        return res.status(400).json({ errors });
     }
 
     //If we get to this point, the request has passed all required validation
@@ -81,8 +78,7 @@ router.post('/', async (req, res) => {
     }
     catch(err){
         errors.push('There was a problem registering the account');
-        res.status(500).json({errors});
-        return;
+        return res.status(500).json({errors});
     }
 
     //Register the user using the salted password
@@ -95,8 +91,7 @@ router.post('/', async (req, res) => {
         id = result.rows[0].id;
     } catch (err) {
         errors.push('There was a problem registering the account');
-        res.status(500).json({errors});
-        return;
+        return res.status(500).json({errors});
     }
     
     //Sign the token and send response to user
@@ -107,8 +102,7 @@ router.post('/', async (req, res) => {
         (err, token) => {
             if (err) {
                 errors.push('There was a problem registering the account');
-                res.status(500).json({errors});
-                return;
+                return res.status(500).json({errors});
             }
 
             res.json({

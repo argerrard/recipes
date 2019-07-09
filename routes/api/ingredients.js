@@ -59,14 +59,14 @@ router.get('/:id', (req, res) => {
 // @desc     Add a new ingredient to the app
 // @access   Private
 // TODO:     Validate that the user sending the request exists
-// TODO:     Validate the user sending the request is logged in
 // TODO:     Add support for optional nutrition fields (ie: saturated fat, etc.)
-router.post('/', auth, (req, res) => {
+router.post('/', auth, async (req, res) => {
 
-    console.log(req.body);
-
-    const { name, userId, servingsize, 
+    const { name, servingsize, 
         measurementtype, calories, protein, fat, carbs } = req.body;
+
+    //Get creating user from the web token
+    const userId = req.user.id;
 
     // Validate that required parameters are present
     if (!name || !userId || !servingsize || !measurementtype || !calories ||
@@ -81,6 +81,16 @@ router.post('/', auth, (req, res) => {
     }).includes(true)) {
         return res.status(400).json({ error: "A numeric field was supplied as not a number." });
     } 
+
+    //Validate that the user sending the request exists
+    try {
+        const result = await db.query('SELECT id FROM AppUser WHERE id=$1;', [userId]);
+        if (result.rows.length == 0) {
+            return res.status(404).json({ error: "User does not exist." });
+        };
+    } catch (err) {
+        return res.status(500).json({ error: "There was a problem adding the ingredient." });
+    }
 
     // User request passed validation, add to the database
     const insertIngredientText = 'INSERT INTO Ingredient (name, uploaderId, servingsize, measurementtype, '+
