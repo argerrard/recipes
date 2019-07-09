@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../db');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('../../config/config.json'); 
+const jwtSecret = config.jwtSecret;
 
 // @route    GET api/users
 // @desc     Get all users
 // @access   Private (admin only)
+// TODO: make this route a private route, it is currently public
 router.get('/', (req, res) => {
     db.query('SELECT * FROM AppUser;',[], (err, result) => {
         res.send({
@@ -95,10 +99,25 @@ router.post('/', async (req, res) => {
         return;
     }
     
-    res.json({
-        user: { id, username, email },
-        message: 'Registration successful!'
-    });
+    //Sign the token and send response to user
+    jwt.sign(
+        { id }, 
+        jwtSecret, 
+        {expiresIn: 3600},
+        (err, token) => {
+            if (err) {
+                errors.push('There was a problem registering the account');
+                res.status(500).json({errors});
+                return;
+            }
+
+            res.json({
+                token,
+                user: { id, username, email },
+                message: 'Registration successful!'
+            });
+        }
+    );
 });
 
 
