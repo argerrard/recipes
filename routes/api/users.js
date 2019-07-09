@@ -101,7 +101,7 @@ router.post('/', async (req, res) => {
     
     //Sign the token and send response to user
     jwt.sign(
-        { id }, 
+        { id, username }, 
         jwtSecret, 
         {expiresIn: 3600},
         (err, token) => {

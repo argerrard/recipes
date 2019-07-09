@@ -31,19 +31,52 @@ router.post('/', async (req, res) => {
         return;
     }
 
-    //Authenticate user based on provided password
+    //Get the password hash from the database to authenticate login
+    var passwordHash = "";
+    var id = "";
     try {
-        const result = await db.query('SELECT password FROM appuser WHERE username=$1;', [username]);
-        const passwordHash = result.rows[0].password;
-        console.log(passwordHash);
+        const result = await db.query('SELECT id, password FROM appuser WHERE username=$1;', [username]);
+        passwordHash = result.rows[0].password;
+        id = result.rows[0].id;
     } catch (err) {
         errors.push('There was a problem validating user credentials.');
         res.status(500).json({ errors });
         return;
     }
 
-    res.json({
-        message: 'successfully logged in'
+    //Compare the hash of the provided password to the hash in the database
+    bcrypt.compare(password, passwordHash)
+    .then(isMatch => {
+        if (!isMatch) {
+            errors.push('Invalid credentials.');
+            res.status(401).json({ errors });
+            return;
+        }
+
+        //Password is valid, return a token to the user
+        jwt.sign(
+            { id, username }, 
+            jwtSecret, 
+            {expiresIn: 3600},
+            (err, token) => {
+                if (err) {
+                    errors.push('There was a problem logging in.');
+                    res.status(500).json({errors});
+                    return;
+                }
+    
+                res.json({
+                    token,
+                    user: { id, username },
+                    message: 'Login successful!'
+                });
+            }
+        );
+    })
+    //Error comparing passwords
+    .catch(err => {
+        errors.push('There was a problem validating user credentials.');
+        res.status(500).json({ errors });
     });
 });
 
