@@ -117,7 +117,7 @@ router.delete('/:id', auth, async (req, res) => {
     
     const id = req.params.id;
 
-    //Get id of user sending the DELETE request from the token
+    //Get id of user sending the request from the token
     const userId = req.user.id;
 
     //ensure passed in ID is numeric
@@ -171,20 +171,42 @@ router.delete('/:id', auth, async (req, res) => {
 //@route    PUT api/ingredients/:id
 //@desc     Update an ingredient's information (only by the owned user)
 //@access   Private
-//TODO:     Authenticate the user sending the request
 //TODO:     Confirm the user updating the request owns the ingredient
-router.put('/:id', (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
     const { name, servingsize, 
         measurementtype, calories, protein, fat, carbs } = req.body;
 
+    //Get id of user sending the request from the token
+    const userId = req.user.id;
+
     //Ensure ingredient id is numeric
     if (isNaN(id)) return res.status(400).json({ error: 'Ingredient id must be numeric.' });
+
+    if (!userId) {
+        return res.status(400).json({ error: "User ID not provided in token." });
+    }
 
     //Ensure the required parameters of the ingredient have been entered
     if (!name || !servingsize || !measurementtype || !calories ||
         !protein || !fat || !carbs) {
             return res.status(400).json({ error: "Required field is missing." });
+    }
+
+    //Confirm the user updating owns the ingredient and that the ingredient exists
+    try {
+        const result = await db.query('SELECT uploaderid FROM Ingredient where id=$1;', [id]);
+
+        if (result.rowCount == 0) return res.status(404).json({ error: "Ingredient was not found." });
+        
+        const uploaderId = result.rows[0].uploaderid;
+
+        if (uploaderId != userId) {
+            console.log(`User ${userId} attempted to update ingredient ${id} without owning it.`);
+            return res.status(401).json({ error: "You are not authorized to update this ingredient." });
+        }
+    } catch(err) {
+        return res.status(500).json({ error: "There was a problem updating the ingredient." });
     }
 
     //Update the ingredient record
