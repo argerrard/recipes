@@ -58,7 +58,6 @@ router.get('/:id', (req, res) => {
 // @route    POST api/ingredients
 // @desc     Add a new ingredient to the app
 // @access   Private
-// TODO:     Validate that the user sending the request exists
 // TODO:     Add support for optional nutrition fields (ie: saturated fat, etc.)
 router.post('/', auth, async (req, res) => {
 
@@ -114,16 +113,39 @@ router.post('/', auth, async (req, res) => {
 //@route    DELETE api/ingredients/:id
 //@desc     Delete an ingredient (only the user that owns can delete)
 //@access   Private
-//TODO:     Authenticate the user sending the delete request
-//TODO:     Confirm the user deleting the request owns the ingredient
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     
     const id = req.params.id;
+
+    //Get id of user sending the DELETE request from the token
+    const userId = req.user.id;
 
     //ensure passed in ID is numeric
     if (isNaN(id)) {
         return res.status(400).json({ error: "ID must be numeric." });
     }
+
+    if (!userId) {
+        return res.status(400).json({ error: "User ID not provided in token." });
+    }
+
+    //Confirm the user deleting the request owns the ingredient and that the ingredient exists
+    try {
+        const result = await db.query('SELECT uploaderid FROM Ingredient where id=$1;', [id]);
+
+        if (result.rowCount == 0) return res.status(404).json({ error: "Ingredient was not found." });
+        
+        const uploaderId = result.rows[0].uploaderid;
+
+        if (uploaderId != userId) {
+            console.log(`User ${userId} attempted to delete ingredient ${id} without owning it.`);
+            return res.status(401).json({ error: "You are not authorized to delete this ingredient." });
+        }
+    } catch(err) {
+        return res.status(500).json({ error: "There was a problem deleting the ingredient." });
+    }
+
+    //If we get here, inputs are valid and user is authorized to delete the ingredient
 
     const deleteText = 'DELETE FROM Ingredient WHERE id=$1';
     const deleteValues = [id];
