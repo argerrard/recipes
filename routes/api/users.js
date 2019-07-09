@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db');
+const bcrypt = require('bcryptjs');
 
 // @route    GET api/users
 // @desc     Get all users
@@ -42,8 +43,8 @@ router.post('/', async (req, res) => {
 
     //Ensure that email does not already exist
     try {
-        const res = await db.query('SELECT email FROM AppUser WHERE email=$1;', [email]);
-        if (res.rows.length == 1) errors.push('This e-mail has already been registered.');
+        const result = await db.query('SELECT email FROM AppUser WHERE email=$1;', [email]);
+        if (result.rows.length == 1) errors.push('This e-mail has already been registered.');
     } catch(err) {
         errors.push('There was a problem verifying the e-mail.');
     }
@@ -66,10 +67,33 @@ router.post('/', async (req, res) => {
     }
 
     //If we get to this point, the request has passed all required validation
+    
+    //Generate salt and hash for the password
+    var pwHash = "";
 
+    try{
+        const salt = await bcrypt.genSalt(10);
+        pwHash = await bcrypt.hash(password, salt);
+    }
+    catch(err){
+        errors.push('There was a problem registering the account');
+        res.status(500).json({errors});
+        return;
+    }
 
+    //Register the user using the salted password
+    const registerText = 'INSERT INTO AppUser (username, email, password) VALUES ($1, $2, $3);';
+
+    try {
+        const result = await db.query(registerText, [username, email, pwHash]);
+    } catch (err) {
+        errors.push('There was a problem registering the account');
+        res.status(500).json({errors});
+        return;
+    }
+    
     res.json({
-        message: 'Registered new user'
+        message: 'Registration successful!'
     });
 });
 
