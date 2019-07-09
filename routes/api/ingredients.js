@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db');
+const auth = require('../../middleware/auth.js');
 
 // @route    GET api/ingredients
 // @desc     Get all ingredients
@@ -60,7 +61,7 @@ router.get('/:id', (req, res) => {
 // TODO:     Validate that the user sending the request exists
 // TODO:     Validate the user sending the request is logged in
 // TODO:     Add support for optional nutrition fields (ie: saturated fat, etc.)
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
 
     console.log(req.body);
 

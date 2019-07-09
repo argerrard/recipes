@@ -1,7 +1,6 @@
-const config = '../config/config.json';
+const config = require('../config/config.json');
 const jwt = require('jsonwebtoken');
 const jwtSecret = config.jwtSecret;
-
 
 function auth(req, res, next) {
     //Get token from request header
