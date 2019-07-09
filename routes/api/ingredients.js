@@ -171,7 +171,6 @@ router.delete('/:id', auth, async (req, res) => {
 //@route    PUT api/ingredients/:id
 //@desc     Update an ingredient's information (only by the owned user)
 //@access   Private
-//TODO:     Confirm the user updating the request owns the ingredient
 router.put('/:id', auth, async (req, res) => {
     const id = req.params.id;
     const { name, servingsize, 

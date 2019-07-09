@@ -9,7 +9,7 @@ const jwtSecret = config.jwtSecret;
 // @route    GET api/users
 // @desc     Get all users
 // @access   Private (admin only)
-// TODO: make this route a private route, it is currently public
+// TODO: make this route a private route only accessible to admin, it is currently public
 router.get('/', (req, res) => {
     db.query('SELECT * FROM AppUser;',[], (err, result) => {
         res.send({
