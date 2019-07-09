@@ -82,10 +82,13 @@ router.post('/', async (req, res) => {
     }
 
     //Register the user using the salted password
-    const registerText = 'INSERT INTO AppUser (username, email, password) VALUES ($1, $2, $3);';
+    const registerText = 'INSERT INTO AppUser (username, email, password) VALUES ($1, $2, $3) RETURNING id;';
+
+    var id = "";
 
     try {
         const result = await db.query(registerText, [username, email, pwHash]);
+        id = result.rows[0].id;
     } catch (err) {
         errors.push('There was a problem registering the account');
         res.status(500).json({errors});
@@ -93,6 +96,7 @@ router.post('/', async (req, res) => {
     }
     
     res.json({
+        user: { id, username, email },
         message: 'Registration successful!'
     });
 });
