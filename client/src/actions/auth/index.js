@@ -9,9 +9,9 @@ import {
 } from '../types.js';
 
 //Action Creator responsible for loading the user using the existing token
-//in local storage (if there is one at all)
+//in local storage
 //TODO: Implement this action creator
-export const loadUser = () => {
+export const getUser = (token) => (dispatch, getState) => {
     return;
 }
 

@@ -36,6 +36,8 @@ class Header extends React.Component {
             <Menu.Item>
                 <Dropdown icon={<Icon name="user circle" color="blue" size="large" />}>
                     <Dropdown.Menu>
+                    <Dropdown.Item text={this.props.username} />
+                    <Dropdown.Divider />
                     <Dropdown.Item text='My Profile' as={Link} to="/profile" />
                     <Dropdown.Item text='My Friends' as={Link} to="/friends" />
                     <Dropdown.Divider />
