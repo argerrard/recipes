@@ -12,7 +12,22 @@ import {
 //in local storage
 //TODO: Implement this action creator
 export const getUser = (token) => (dispatch, getState) => {
-    return;
+
+    //Check with the auth api if the token is valid
+    axios.get('/api/auth/user', { 
+        headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": token
+        }
+    })
+    .then(response => {
+        //Token was valid, log the user in
+        console.log(response.data.user);
+    })
+    .catch(error => {
+        console.log(error.response.data.errors[0]);
+    });
+
 }
 
 //Action Creator responsible for logging in the user

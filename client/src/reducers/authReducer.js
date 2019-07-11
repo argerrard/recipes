@@ -1,14 +1,13 @@
 import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAIL
 } from '../actions/types';
 
 const INITIAL_STATE = {
     isLoggedIn: false,
-    userId: null,
+    id: null,
     username: "",
     token: null,
     errors: []
@@ -17,15 +16,30 @@ const INITIAL_STATE = {
 const authReducer = (state=INITIAL_STATE, action) => {
 
     switch(action.type) {
-        case GET_USER:
+        //This action means that the user has been successfully authenticated
+        //This can occur either by having a valid token in local storage
+        //or by logging in with the correct credentials
+        case LOGIN_SUCCESS:
             return {
-                ...state,
-                isLoggedIn: action.payload.isLoggedIn,
-                userId: action.payload.userId,
+                isLoggedIn: true,
+                userId: action.payload.id,
                 username: action.payload.username,
-                token: action.payload.token
+                token: action.payload.token,
+                errors: []
             };
 
+        //This actions means that the user login action failed
+        //This can occur if a token expires and is attempted to be used
+        //or if a user logs in with incorrect credentials
+        case LOGIN_FAILURE:
+            return {
+                isLoggedIn: false,
+                userId: null,
+                username: "",
+                token: null,
+                errors: action.payload
+            }
+            
         default:
             return state;
 

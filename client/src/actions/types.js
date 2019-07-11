@@ -12,7 +12,6 @@ export const DELETE_INGREDIENT_ERROR = 'DELETE_INGREDIENT_ERROR';
 
 
 //Authentication actions
-export const GET_USER = 'GET_USER';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';

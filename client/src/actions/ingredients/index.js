@@ -31,7 +31,7 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
 
     }).catch(error => {
 
-        const error_text = error.data ? error.data : 'Could not contact the server.';
+        const error_text = error.response.data ? error.response.data : 'Could not contact the server.';
 
         dispatch({
             type: ADD_INGREDIENT_ERROR,
@@ -52,7 +52,7 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
         });
     })
     .catch(error => {
-        const error_text = error.data ? error.data : 'Could not fetch ingredients from the server';
+        const error_text = error.response.data ? error.response.data : 'Could not fetch ingredients from the server';
 
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
@@ -74,7 +74,7 @@ export const fetchIngredient = (ingredientId) => (dispatch, getState) => {
         });
     })
     .catch(error => {
-        const error_text = error.data ? error.data : 'There was a problem loading the ingredient.';
+        const error_text = error.response.data ? error.response.data : 'There was a problem loading the ingredient.';
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
             payload: error_text
@@ -95,7 +95,7 @@ export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
         })
     })
     .catch(error => {
-        const error_text = error.data ? error.data.message : 'Could not delete ingredient from the server';
+        const error_text = error.response.data ? error.response.data.message : 'Could not delete ingredient from the server';
         
         dispatch({
             type: DELETE_INGREDIENT_ERROR,
@@ -120,7 +120,7 @@ export const editIngredient = (ingredientId, ingredientValues) => (dispatch, get
         history.push('/ingredients');
     })
     .catch(error => {
-        const error_text = error.data ? error.data.message : 'Could not connect to the server.';
+        const error_text = error.response.data ? error.response.data.message : 'Could not connect to the server.';
         
         dispatch({
             type: EDIT_INGREDIENT_ERROR,
