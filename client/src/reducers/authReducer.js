@@ -31,7 +31,7 @@ const authReducer = (state=INITIAL_STATE, action) => {
         //This actions means that the user login action failed
         //This can occur if a token expires and is attempted to be used
         //or if a user logs in with incorrect credentials
-        case LOGIN_FAILURE:
+        case LOGIN_FAIL:
             return {
                 isLoggedIn: false,
                 userId: null,
@@ -39,7 +39,7 @@ const authReducer = (state=INITIAL_STATE, action) => {
                 token: null,
                 errors: action.payload
             }
-            
+
         default:
             return state;
 

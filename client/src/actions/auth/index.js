@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import {
-    GET_USER,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     REGISTER_SUCCESS,
@@ -10,22 +9,40 @@ import {
 
 //Action Creator responsible for loading the user using the existing token
 //in local storage
-//TODO: Implement this action creator
 export const getUser = (token) => (dispatch, getState) => {
-
     //Check with the auth api if the token is valid
     axios.get('/api/auth/user', { 
         headers: {
             "Content-Type": "application/json",
             "x-auth-token": token
         }
-    })
-    .then(response => {
+    }).then(response => {
         //Token was valid, log the user in
-        console.log(response.data.user);
-    })
-    .catch(error => {
-        console.log(error.response.data.errors[0]);
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: response.data.user
+        });
+    }).catch(error => {
+        //Token was invalid
+        //Delete invalid token from local storage
+        localStorage.removeItem('access-token');
+        
+        //Add the error message returned by the API (or default message)
+        const errors = [];
+        if (error.response.data) {
+            error.response.data.errors.forEach(error => {
+                errors.push(error);
+            });
+        } else {
+            errors.push('There was a problem contacting the server.');
+        }
+
+        //Dispatch failed login action
+        dispatch({
+            type: LOGIN_FAIL,
+            payload: errors
+        })
+
     });
 
 }

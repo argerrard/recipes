@@ -8,7 +8,7 @@ function auth(req, res, next) {
 
     //Ensure that token is sent with request
     if (!token) {
-        return res.status(401).json({ errors: ['A JSON web token is required to access this route.'] });
+        return res.status(401).json({ errors: ['A token is required to access this route.'] });
     }
 
     //Verify token
