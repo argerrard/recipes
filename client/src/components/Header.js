@@ -1,8 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown, Button, Menu, Icon } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 class Header extends React.Component {
+
+    componentDidMount() {
+
+    }
 
     //Helper method to render the header when a user is not logged in
     renderDefault() {
@@ -42,14 +47,14 @@ class Header extends React.Component {
         );
     }
 
-    render () {
+    render() {
         return (
             <Menu>
                 <Menu.Item header as={Link} to="/">
                     Recipes
                 </Menu.Item>
                 <Menu.Menu position='right'>
-                    {this.renderLoggedIn()}
+                    {this.props.isLoggedIn ? this.renderLoggedIn() : this.renderDefault()}
                 </Menu.Menu>
             </Menu>
         );
@@ -57,4 +62,11 @@ class Header extends React.Component {
 
 }
 
-export default Header;
+export const mapStateToProps = (state) => {
+    return {
+        isLoggedIn: state.auth.isLoggedIn,
+        username: state.auth.username
+    };
+};
+
+export default connect(mapStateToProps, null)(Header);
