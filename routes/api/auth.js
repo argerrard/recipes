@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json'); 
 const jwtSecret = config.jwtSecret;
+const auth = require('../../middleware/auth.js');
 
 // @route    POST api/auth
 // @desc     Authenticate a user and provide them with a token
@@ -75,5 +76,19 @@ router.post('/', async (req, res) => {
         res.status(500).json({ errors });
     });
 });
+
+// @route    POST api/auth/user
+// @desc     Return the user when supplied with an appropriate token
+// @access   Private
+router.get('/user', auth, (req, res) => {
+
+    //No need to validate any inputs, token is validated by middleware
+
+    //Send the response containing the user information
+    res.json({
+        user: req.user
+    });
+});
+
 
 module.exports = router;
