@@ -20,7 +20,10 @@ export const getUser = (token) => (dispatch, getState) => {
         //Token was valid, log the user in
         dispatch({
             type: LOGIN_SUCCESS,
-            payload: response.data.user
+            payload: {
+                user: response.data.user,
+                token
+            }
         });
     }).catch(error => {
         //Token was invalid
@@ -49,15 +52,21 @@ export const getUser = (token) => (dispatch, getState) => {
 
 //Action Creator responsible for logging in the user
 //LOGIN_SUCCESS is dispatched on success and LOGIN_FAIL is dispatched on fail
-//TODO: Implement this action creator
 export const loginUser = (username, password) => (dispatch, getState) => {
     //Send the entered username and password to the server to verify
     axios.post('/api/auth', { username, password })
     .then(response => {
-        //Login Succeeded, dispatch the login success action
-        const token = response.data.token;
-        const username = response.data.user.username;
-        const id = response.data.user.id;
+        //Login Succeeded, store the token in local storage for persistent login
+        localStorage.setItem('access-token', response.data.token);
+        
+        //Dispatch the login success action
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: {
+                user: response.data.user,
+                token: response.data.token
+            }
+        });
     })
     .catch(error => {
         //Login Failed
