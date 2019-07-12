@@ -3,7 +3,8 @@ import {
     REGISTER_FAIL,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT
+    LOGOUT,
+    CLEAR_AUTH_ERRORS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -39,11 +40,19 @@ const authReducer = (state=INITIAL_STATE, action) => {
                 errors: action.payload
             };
         
+        //This action is created when a user chooses to log out
         case LOGOUT:
             return {
                 isLoggedIn: false,
                 user: {},
                 token: null,
+                errors: []
+            };
+
+        //This action is created to clear login errors (ie: if user closes the login screen)
+        case CLEAR_AUTH_ERRORS:
+            return {
+                ...state,
                 errors: []
             };
 

@@ -32,7 +32,7 @@ class LoginForm extends React.Component {
     //Helper method to render both API and form validation errors
     renderErrors = () => {
         //Create a new array of errors made up of both form and API errors
-        const errors = this.state.formErrors.concat([]);
+        const errors = this.state.formErrors.concat(this.props.apiErrors);
 
         if (errors.length === 0) return null;
 
@@ -79,4 +79,4 @@ const mapStateToProps = (state) => {
     }; 
 }
 
-export default connect(null, { loginUser })(LoginForm);
+export default connect(mapStateToProps, { loginUser })(LoginForm);

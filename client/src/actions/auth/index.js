@@ -7,7 +7,8 @@ import {
     LOGIN_FAIL,
     REGISTER_SUCCESS,
     REGISTER_FAIL,
-    LOGOUT
+    LOGOUT,
+    CLEAR_AUTH_ERRORS
 } from '../types.js';
 
 //Action Creator responsible for loading the user using the existing token
@@ -113,4 +114,11 @@ export const logoutUser = () => (dispatch, getState) => {
     dispatch({
         type: LOGOUT
     });
+}
+
+//Action Creator to clear any errors from authentication
+export const clearAuthErrors = () => {
+    return {
+        type: CLEAR_AUTH_ERRORS
+    };
 }
