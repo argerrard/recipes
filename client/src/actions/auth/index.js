@@ -50,8 +50,8 @@ export const getUser = (token) => (dispatch, getState) => {
 //Action Creator responsible for logging in the user
 //LOGIN_SUCCESS is dispatched on success and LOGIN_FAIL is dispatched on fail
 //TODO: Implement this action creator
-export const loginUser = () => {
-    return;
+export const loginUser = (username, password) => (dispatch, getState) => {
+    //Send the entered username and password to the server to verify
 }
 
 //Action Creator responsible for registering a new user
