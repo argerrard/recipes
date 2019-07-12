@@ -8,14 +8,42 @@ import { loginUser } from '../../actions/auth';
 //Redux form seems unnecessary for this one
 class LoginForm extends React.Component {
 
-    state = { username: "", password: "" };
+    state = { username: "", password: "" , formErrors: []};
 
+    //Make the form a controller component
     onChange = (e, {name, value}) => {
         this.setState({[name]: value});
     }
 
     onSubmit = () => {
-        this.props.loginUser(this.state.username, this.state.password);
+
+        //Ensure that both username and password are filled in
+        if (this.state.username === "" || this.state.password === "") {
+            this.setState({ formErrors: ["Please enter both a username and password."] });
+        } else {
+            //Send the login request to the API, remove any form errors
+            //Note that there could still be errors returned by the API but if we get here
+            //there are no form errors
+            this.props.loginUser(this.state.username, this.state.password);
+            this.setState({ formErrors: [] });
+        }
+    }
+
+    //Helper method to render both API and form validation errors
+    renderErrors = () => {
+        //Create a new array of errors made up of both form and API errors
+        const errors = this.state.formErrors.concat([]);
+
+        if (errors.length === 0) return null;
+
+        return (
+            <Message negative>
+                <Message.Header>There was a problem.</Message.Header>
+                {errors.map((error, index) => {
+                    return <p key={index}>{error}</p>;
+                })}
+            </Message>
+        );
     }
 
     render() {
@@ -29,7 +57,7 @@ class LoginForm extends React.Component {
             <Form
                 className="attached fluid segment" 
                 onSubmit={this.onSubmit}>
-                <Form.Input required error={false} onChange={this.onChange} name='username'
+                <Form.Input error={false} onChange={this.onChange} name='username'
                     value={this.state.name}
                     autoComplete="off" fluid label="Username" placeholder="Username" />
                 <Form.Input required error={false} onChange={this.onChange} 
@@ -37,11 +65,18 @@ class LoginForm extends React.Component {
                     value={this.state.password}
                     autoComplete="off" fluid label="Password" placeholder="Password" />
                 <Form.Button primary content='Submit' />
+                {this.renderErrors()}
             </Form>
             </div>
         );
     }
 
+}
+
+const mapStateToProps = (state) => {
+    return {
+        apiErrors: state.auth.errors
+    }; 
 }
 
 export default connect(null, { loginUser })(LoginForm);
