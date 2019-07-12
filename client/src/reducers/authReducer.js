@@ -2,7 +2,8 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     LOGIN_SUCCESS,
-    LOGIN_FAIL
+    LOGIN_FAIL,
+    LOGOUT
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -36,7 +37,15 @@ const authReducer = (state=INITIAL_STATE, action) => {
                 user: {},
                 token: null,
                 errors: action.payload
-            }
+            };
+        
+        case LOGOUT:
+            return {
+                isLoggedIn: false,
+                user: {},
+                token: null,
+                errors: []
+            };
 
         default:
             return state;

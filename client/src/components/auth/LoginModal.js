@@ -1,7 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { Form, Message, Modal, Button } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import { Modal, Button } from 'semantic-ui-react';
 
 import LoginForm from './LoginForm';
 

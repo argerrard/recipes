@@ -4,7 +4,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    LOGOUT
 } from '../types.js';
 
 //Action Creator responsible for loading the user using the existing token
@@ -96,4 +97,15 @@ export const loginUser = (username, password) => (dispatch, getState) => {
 //REGISTER_SUCCESS is dispatched on success and REGISTER_FAIL is dispatched on fail
 export const registerUser = () => {
     return;
+}
+
+//Action Creator response for logging out a user
+export const logoutUser = () => (dispatch, getState) => {
+    //remove the access token from local storage to prevent staying logged in
+    localStorage.removeItem('access-token');
+
+    //dispatch logout action to update state
+    dispatch({
+        type: LOGOUT
+    });
 }

@@ -4,6 +4,7 @@ import { Dropdown, Button, Menu, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import LoginModal from './auth/LoginModal';
+import { logoutUser } from '../actions/auth';
 
 class Header extends React.Component {
 
@@ -43,7 +44,7 @@ class Header extends React.Component {
                     <Dropdown.Item text='My Profile' as={Link} to="/profile" />
                     <Dropdown.Item text='My Friends' as={Link} to="/friends" />
                     <Dropdown.Divider />
-                    <Dropdown.Item text='Logout' as={Link} to="/" />
+                    <Dropdown.Item text='Logout' onClick={this.props.logoutUser} />
                     </Dropdown.Menu>
                 </Dropdown>
             </Menu.Item>
@@ -67,7 +68,6 @@ class Header extends React.Component {
 }
 
 export const mapStateToProps = (state) => {
-    console.log(state.auth);
     const username = state.auth.user.hasOwnProperty('username') ? state.auth.user.username : "";
 
     return {
@@ -76,4 +76,4 @@ export const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, null)(Header);
+export default connect(mapStateToProps, {logoutUser})(Header);
