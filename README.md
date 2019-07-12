@@ -6,4 +6,6 @@ I will be building this app to help me practice building a CRUD application that
 # TO-DO:
 * Add support for optional nutrition fields when adding ingredients
 * Paginate fetched ingredient results
-* Change IngredientList so user can only edit and delete ingredients belonging to them
+* Change IngredientList so edit and delete buttons are only shown to users with the ability to do the actions
+* Add sign-up functionality
+* Add validation to login

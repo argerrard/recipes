@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import history from '../../history';
+
 import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
@@ -103,6 +105,9 @@ export const registerUser = () => {
 export const logoutUser = () => (dispatch, getState) => {
     //remove the access token from local storage to prevent staying logged in
     localStorage.removeItem('access-token');
+
+    //re-route user back to home
+    history.push('/');
 
     //dispatch logout action to update state
     dispatch({
