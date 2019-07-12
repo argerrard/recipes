@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Dropdown, Button, Menu, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
+import LoginModal from './auth/LoginModal';
+
 class Header extends React.Component {
 
     componentDidMount() {
@@ -14,7 +16,7 @@ class Header extends React.Component {
         return (
             <>
             <Menu.Item>
-                <Button primary as={Link} to="/login">Login</Button>
+                <LoginModal />
             </Menu.Item>
             <Menu.Item>
                 <Button primary as={Link} to="/signup">Sign Up</Button>
