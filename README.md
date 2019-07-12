@@ -8,4 +8,3 @@ I will be building this app to help me practice building a React/Redux CRUD appl
 * Paginate fetched ingredient results
 * Change IngredientList so edit and delete buttons are only shown to users with the ability to do the actions
 * Add sign-up functionality
-* Add validation to login
