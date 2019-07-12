@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { loginUser } from '../../actions/auth';
+import { loginUser, clearAuthErrors } from '../../actions/auth';
 
 //Experimenting with using controlled components instead of Redux Form for this form
 //Redux form seems unnecessary for this one
@@ -10,12 +10,19 @@ class LoginForm extends React.Component {
 
     state = { username: "", password: "" , formErrors: []};
 
+    componentWillUnmount = () => {
+        //When component is closed, erase any errors
+        this.props.clearAuthErrors();
+    }
+
     //Make the form a controller component
     onChange = (e, {name, value}) => {
         this.setState({[name]: value});
     }
 
     onSubmit = () => {
+        //Clear existing API errors if there are any
+        if (this.props.apiErrors.length > 0) this.props.clearAuthErrors();
 
         //Ensure that both username and password are filled in
         if (this.state.username === "" || this.state.password === "") {
@@ -57,7 +64,7 @@ class LoginForm extends React.Component {
             <Form
                 className="attached fluid segment" 
                 onSubmit={this.onSubmit}>
-                <Form.Input error={false} onChange={this.onChange} name='username'
+                <Form.Input error={false} required onChange={this.onChange} name='username'
                     value={this.state.name}
                     autoComplete="off" fluid label="Username" placeholder="Username" />
                 <Form.Input required error={false} onChange={this.onChange} 
@@ -79,4 +86,4 @@ const mapStateToProps = (state) => {
     }; 
 }
 
-export default connect(mapStateToProps, { loginUser })(LoginForm);
+export default connect(mapStateToProps, { loginUser, clearAuthErrors })(LoginForm);
