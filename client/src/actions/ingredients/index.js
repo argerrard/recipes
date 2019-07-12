@@ -18,8 +18,13 @@ import {
 //Creates an action to add a new ingredient to the database
 //The ingredient information to be added is found in the payload of the action
 export const addIngredient = (newIngredient) => (dispatch, getState) => {
-    
-    axios.post('/api/ingredients/', {...newIngredient, userId: 1})
+    axios.post('/api/ingredients/', {...newIngredient, userId: 1}, 
+        { 
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token": getState().auth.token
+            }
+        })
     .then(response => {
         dispatch({
             type: ADD_INGREDIENT,
@@ -84,10 +89,14 @@ export const fetchIngredient = (ingredientId) => (dispatch, getState) => {
 }
 
 //Creates an action to delete an ingredient from the server
-//TODO: add authentication so that only the user that created the ingredient can delete it
 export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
 
-    axios.delete(`/api/ingredients/${ingredientId}`)
+    axios.delete(`/api/ingredients/${ingredientId}`,  { 
+        headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": getState().auth.token
+        }
+    })
     .then(response => {
         dispatch({
             type: DELETE_INGREDIENT,
@@ -106,10 +115,14 @@ export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
 }
 
 //Action to edit ingredient
-//TODO: add authentication so that only the user that created the ingredient can edit
 export const editIngredient = (ingredientId, ingredientValues) => (dispatch, getState) => {
 
-    axios.put(`/api/ingredients/${ingredientId}`, ingredientValues)
+    axios.put(`/api/ingredients/${ingredientId}`, ingredientValues,  { 
+        headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": getState().auth.token
+        }
+    })
     .then(response => {
         dispatch({
             type: EDIT_INGREDIENT,
