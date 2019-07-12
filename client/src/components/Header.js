@@ -67,9 +67,12 @@ class Header extends React.Component {
 }
 
 export const mapStateToProps = (state) => {
+
+    const username = state.auth.user.hasOwnProperty('username') ? state.auth.user.username : "";
+
     return {
         isLoggedIn: state.auth.isLoggedIn,
-        username: state.auth.username
+        username
     };
 };
 

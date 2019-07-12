@@ -52,6 +52,35 @@ export const getUser = (token) => (dispatch, getState) => {
 //TODO: Implement this action creator
 export const loginUser = (username, password) => (dispatch, getState) => {
     //Send the entered username and password to the server to verify
+    axios.post('/api/auth', { username, password })
+    .then(response => {
+        //Login Succeeded, dispatch the login success action
+        const token = response.data.token;
+        const username = response.data.user.username;
+        const id = response.data.user.id;
+    })
+    .catch(error => {
+        //Login Failed
+        const errors = [];
+
+        //Handle case where server did not response
+        if (!error.response.data) {
+            errors.push('Could not contact the server.');
+        } 
+        //Handle case were server responded with errors
+        else {
+            error.response.data.errors.forEach(error => {
+                errors.push(error);
+            });
+        }
+
+        //Dispatch action to notify failed login
+        dispatch({
+            type: LOGIN_FAIL,
+            payload: errors
+        });
+
+    });
 }
 
 //Action Creator responsible for registering a new user
