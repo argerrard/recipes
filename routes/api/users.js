@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../../config/config.json'); 
 const jwtSecret = config.jwtSecret;
 
+const AUTH_TOKEN_LENGTH = 3600;
+
 // @route    GET api/users
 // @desc     Get all users
 // @access   Private (admin only)
@@ -98,7 +100,7 @@ router.post('/', async (req, res) => {
     jwt.sign(
         { id, username }, 
         jwtSecret, 
-        {expiresIn: 3600},
+        {expiresIn: AUTH_TOKEN_LENGTH},
         (err, token) => {
             if (err) {
                 errors.push('There was a problem registering the account');

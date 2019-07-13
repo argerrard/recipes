@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     })
     .catch(err => {
         console.log(err);
-        return res.status(500).json({ error: "Unable to fetch ingredients." });
+        return res.status(500).json({ errors: ["Unable to fetch ingredients."] });
     });
     
 });
@@ -31,7 +31,7 @@ router.get('/:id', (req, res) => {
 
     //ensure passed in ID is numeric
     if (isNaN(id)) {
-        return res.status(400).json({ error: "ID must be numeric." });
+        return res.status(400).json({ errors: ["ID must be numeric."] });
     }
 
     const getIngredientText = 'SELECT * FROM Ingredient WHERE id=$1;';
@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 
         //Return not found if no ID is found
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: "Ingredient was not found." });
+            return res.status(404).json({ errors: ["Ingredient was not found."] });
         }
 
         //Ingredient is found
@@ -49,7 +49,7 @@ router.get('/:id', (req, res) => {
 
     })
     .catch(err => {
-        return res.status(500).json({ error: "There was a problem getting the ingredient." });
+        return res.status(500).json({ errors: ["There was a problem getting the ingredient."] });
     });
 
 });
@@ -70,7 +70,7 @@ router.post('/', auth, async (req, res) => {
     // Validate that required parameters are present
     if (!name || !userId || !servingsize || !measurementtype || !calories ||
         !protein || !fat || !carbs) {
-            return res.status(400).json({ error: "Required field is missing." });
+            return res.status(400).json({ errors: ["Required field is missing."] });
     }
 
     // Validate that numeric fields are numbers
@@ -78,17 +78,17 @@ router.post('/', auth, async (req, res) => {
         if (isNaN(field)) return true;
         return false;
     }).includes(true)) {
-        return res.status(400).json({ error: "A numeric field was supplied as not a number." });
+        return res.status(400).json({ errors: ["A numeric field was supplied as not a number."] });
     } 
 
     //Validate that the user sending the request exists
     try {
         const result = await db.query('SELECT id FROM AppUser WHERE id=$1;', [userId]);
         if (result.rows.length == 0) {
-            return res.status(404).json({ error: "User does not exist." });
+            return res.status(404).json({ errors: ["User does not exist."] });
         };
     } catch (err) {
-        return res.status(500).json({ error: "There was a problem adding the ingredient." });
+        return res.status(500).json({ errors: ["There was a problem adding the ingredient."] });
     }
 
     // User request passed validation, add to the database
@@ -99,7 +99,7 @@ router.post('/', auth, async (req, res) => {
     db.query(insertIngredientText, ingredientValues, (err, result) => {
         if (err) {
             console.log(err);
-            return res.status(500).json({ error: "There was a problem adding the ingredient." });
+            return res.status(500).json({ errors: ["There was a problem adding the ingredient."] });
         }
 
         //Record was added successfully
@@ -122,27 +122,27 @@ router.delete('/:id', auth, async (req, res) => {
 
     //ensure passed in ID is numeric
     if (isNaN(id)) {
-        return res.status(400).json({ error: "ID must be numeric." });
+        return res.status(400).json({ errors: ["ID must be numeric."] });
     }
 
     if (!userId) {
-        return res.status(400).json({ error: "User ID not provided in token." });
+        return res.status(400).json({ errors: ["User ID not provided in token."] });
     }
 
     //Confirm the user deleting the request owns the ingredient and that the ingredient exists
     try {
         const result = await db.query('SELECT uploaderid FROM Ingredient where id=$1;', [id]);
 
-        if (result.rowCount == 0) return res.status(404).json({ error: "Ingredient was not found." });
+        if (result.rowCount == 0) return res.status(404).json({ errors: ["Ingredient was not found."] });
         
         const uploaderId = result.rows[0].uploaderid;
 
         if (uploaderId != userId) {
             console.log(`User ${userId} attempted to delete ingredient ${id} without owning it.`);
-            return res.status(401).json({ error: "You are not authorized to delete this ingredient." });
+            return res.status(401).json({ errors: ["You are not authorized to delete this ingredient."] });
         }
     } catch(err) {
-        return res.status(500).json({ error: "There was a problem deleting the ingredient." });
+        return res.status(500).json({ errors: ["There was a problem deleting the ingredient."] });
     }
 
     //If we get here, inputs are valid and user is authorized to delete the ingredient
@@ -153,7 +153,7 @@ router.delete('/:id', auth, async (req, res) => {
     //Delete entry from database
     db.query(deleteText, deleteValues)
     .then(result => {
-        if (result.rowCount === 0) return res.status(404).json({ error: 'Ingredient could not be found for deletion.' });
+        if (result.rowCount === 0) return res.status(404).json({ errors: ['Ingredient could not be found for deletion.'] });
 
         //Successful deletion
         console.log(`Ingredient ID ${id} has been deleted`);
@@ -161,7 +161,7 @@ router.delete('/:id', auth, async (req, res) => {
     })
     .catch(err=> {
         console.log(err);
-        return res.status(500).json({ error: 'There was a problem deleting the ingredient.' });
+        return res.status(500).json({ errors: ['There was a problem deleting the ingredient.'] });
     });
 
 
@@ -180,32 +180,32 @@ router.put('/:id', auth, async (req, res) => {
     const userId = req.user.id;
 
     //Ensure ingredient id is numeric
-    if (isNaN(id)) return res.status(400).json({ error: 'Ingredient id must be numeric.' });
+    if (isNaN(id)) return res.status(400).json({ errors: ['Ingredient id must be numeric.'] });
 
     if (!userId) {
-        return res.status(400).json({ error: "User ID not provided in token." });
+        return res.status(400).json({ errors: ["User ID not provided in token."] });
     }
 
     //Ensure the required parameters of the ingredient have been entered
     if (!name || !servingsize || !measurementtype || !calories ||
         !protein || !fat || !carbs) {
-            return res.status(400).json({ error: "Required field is missing." });
+            return res.status(400).json({ errors: ["Required field is missing."] });
     }
 
     //Confirm the user updating owns the ingredient and that the ingredient exists
     try {
         const result = await db.query('SELECT uploaderid FROM Ingredient where id=$1;', [id]);
 
-        if (result.rowCount == 0) return res.status(404).json({ error: "Ingredient was not found." });
+        if (result.rowCount == 0) return res.status(404).json({ errors: ["Ingredient was not found."] });
         
         const uploaderId = result.rows[0].uploaderid;
 
         if (uploaderId != userId) {
             console.log(`User ${userId} attempted to update ingredient ${id} without owning it.`);
-            return res.status(401).json({ error: "You are not authorized to update this ingredient." });
+            return res.status(401).json({ errors: ["You are not authorized to update this ingredient."] });
         }
     } catch(err) {
-        return res.status(500).json({ error: "There was a problem updating the ingredient." });
+        return res.status(500).json({ errors: ["There was a problem updating the ingredient."] });
     }
 
     //Update the ingredient record
@@ -218,12 +218,12 @@ router.put('/:id', auth, async (req, res) => {
         if (result.rowCount === 1) {
             return res.status(200).json({ message: 'The ingredient was successfully updated.' });
         } else {
-            return res.status(404).json({ error: 'The ingredient could not be found for updating.'});
+            return res.status(404).json({ errors: ['The ingredient could not be found for updating.']});
         }
     })
     .catch(err => {
         console.log(err);
-        return res.status(500).json({ error: 'There was a problem updating the ingredient.' });
+        return res.status(500).json({ errors: ['There was a problem updating the ingredient.'] });
     });
 
 

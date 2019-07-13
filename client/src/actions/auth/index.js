@@ -103,12 +103,12 @@ export const registerUser = () => {
 }
 
 //Action Creator response for logging out a user
-export const logoutUser = () => (dispatch, getState) => {
+export const logoutUser = () => (dispatch) => {
     //remove the access token from local storage to prevent staying logged in
     localStorage.removeItem('access-token');
 
-    //re-route user back to home
-    history.push('/');
+    //re-route user to login screen
+    history.push('/login');
 
     //dispatch logout action to update state
     dispatch({

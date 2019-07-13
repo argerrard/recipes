@@ -7,6 +7,8 @@ const config = require('../../config/config.json');
 const jwtSecret = config.jwtSecret;
 const auth = require('../../middleware/auth.js');
 
+const AUTH_TOKEN_LENGTH = 10;
+
 // @route    POST api/auth
 // @desc     Authenticate a user and provide them with a token
 // @access   Public
@@ -55,7 +57,7 @@ router.post('/', async (req, res) => {
         jwt.sign(
             { id, username }, 
             jwtSecret, 
-            {expiresIn: 3600},
+            {expiresIn: AUTH_TOKEN_LENGTH},
             (err, token) => {
                 if (err) {
                     errors.push('There was a problem logging in.');

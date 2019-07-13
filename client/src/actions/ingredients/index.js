@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import history from '../../history';
+import { logoutUser } from '../auth';
 import {
     ADD_INGREDIENT,
     ADD_INGREDIENT_ERROR,
@@ -11,7 +12,7 @@ import {
     FETCH_INGREDIENTS,
     FETCH_INGREDIENTS_ERROR,
     DELETE_INGREDIENT_ERROR,
-    DELETE_INGREDIENT
+    DELETE_INGREDIENT,
 } from '../types';
 
 
@@ -36,12 +37,17 @@ export const addIngredient = (newIngredient) => (dispatch, getState) => {
 
     }).catch(error => {
 
-        const error_text = error.response.data ? error.response.data : 'Could not contact the server.';
+        const error_text = error.response.data ? error.response.data.errors[0] : 'Could not contact the server.';
 
         dispatch({
             type: ADD_INGREDIENT_ERROR,
             payload: error_text
         });
+
+        //If the user's token is expired then log them out
+        if (error_text === 'Invalid token.') {
+            logoutUser()(dispatch);
+        }
     });
 }
 
@@ -57,7 +63,7 @@ export const fetchIngredients = (query) => (dispatch, getState) => {
         });
     })
     .catch(error => {
-        const error_text = error.response.data ? error.response.data : 'Could not fetch ingredients from the server';
+        const error_text = error.response.data ? error.response.data.errors[0] : 'Could not fetch ingredients from the server';
 
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
@@ -79,7 +85,7 @@ export const fetchIngredient = (ingredientId) => (dispatch, getState) => {
         });
     })
     .catch(error => {
-        const error_text = error.response.data ? error.response.data : 'There was a problem loading the ingredient.';
+        const error_text = error.response.data ? error.response.data.errors[0] : 'There was a problem loading the ingredient.';
         dispatch({
             type: FETCH_INGREDIENTS_ERROR,
             payload: error_text
@@ -104,12 +110,17 @@ export const deleteIngredient = (ingredientId) => (dispatch, getState) => {
         })
     })
     .catch(error => {
-        const error_text = error.response.data ? error.response.data.message : 'Could not delete ingredient from the server';
+        const error_text = error.response.data ? error.response.data.errors[0] : 'Could not delete ingredient from the server';
         
         dispatch({
             type: DELETE_INGREDIENT_ERROR,
             payload: error_text
         });
+
+        //If the user's token is expired then log them out
+        if (error_text === 'Invalid token.') {
+            logoutUser()(dispatch);
+        }
     });
 
 }
@@ -133,12 +144,18 @@ export const editIngredient = (ingredientId, ingredientValues) => (dispatch, get
         history.push('/ingredients');
     })
     .catch(error => {
-        const error_text = error.response.data ? error.response.data.message : 'Could not connect to the server.';
+        const error_text = error.response.data ? error.response.data.errors[0] : 'Could not connect to the server.';
         
         dispatch({
             type: EDIT_INGREDIENT_ERROR,
             payload: error_text
         });
+
+        //If the user's token is expired then log them out
+        if (error_text === 'Invalid token.') {
+            logoutUser()(dispatch);
+        }
+
     });
 
 
