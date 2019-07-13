@@ -7,7 +7,7 @@ const config = require('../../config/config.json');
 const jwtSecret = config.jwtSecret;
 const auth = require('../../middleware/auth.js');
 
-const AUTH_TOKEN_LENGTH = 10;
+const AUTH_TOKEN_LENGTH = 3600;
 
 // @route    POST api/auth
 // @desc     Authenticate a user and provide them with a token
