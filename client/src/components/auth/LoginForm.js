@@ -71,7 +71,7 @@ class LoginForm extends React.Component {
                     type="password" name='password'
                     value={this.state.password}
                     autoComplete="off" fluid label="Password" placeholder="Password" />
-                <Form.Button primary content='Submit' />
+                <Form.Button primary content='Log In' />
                 {this.renderErrors()}
             </Form>
             </div>

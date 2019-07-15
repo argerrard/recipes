@@ -22,7 +22,7 @@ class Header extends React.Component {
                 <AuthModal buttonName='Login' authForm={<LoginForm />} />
             </Menu.Item>
             <Menu.Item>
-                <AuthModal buttonName='Register' authForm={<SignUpForm />} />
+                <AuthModal buttonName='Sign Up' authForm={<SignUpForm />} />
             </Menu.Item>
             </>
         );
