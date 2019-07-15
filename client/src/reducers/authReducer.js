@@ -20,8 +20,9 @@ const authReducer = (state=INITIAL_STATE, action) => {
     switch(action.type) {
         //This action means that the user has been successfully authenticated
         //This can occur either by having a valid token in local storage
-        //or by logging in with the correct credentials
+        //or by logging in with the correct credentials, or registering
         case LOGIN_SUCCESS:
+        case REGISTER_SUCCESS:
             return {
                 isLoggedIn: true,
                 user: action.payload.user,
@@ -33,6 +34,7 @@ const authReducer = (state=INITIAL_STATE, action) => {
         //This can occur if a token expires and is attempted to be used
         //or if a user logs in with incorrect credentials
         case LOGIN_FAIL:
+        case REGISTER_FAIL:
             return {
                 isLoggedIn: false,
                 user: {},

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { clearAuthErrors } from '../../actions/auth';
+import { clearAuthErrors, registerUser } from '../../actions/auth';
 
 //Experimenting not using redux form for this
 class SignUpForm extends React.Component {
@@ -21,6 +21,9 @@ class SignUpForm extends React.Component {
 
     onSubmit = () => {
 
+        //Clear existing API errors if there are any
+        if (this.props.apiErrors.length > 0) this.props.clearAuthErrors();
+
         const formErrors = this.validateForm();
 
         //Set validation errors if there are any
@@ -30,13 +33,11 @@ class SignUpForm extends React.Component {
             //Send the login request to the API, remove any form errors
             //Note that there could still be errors returned by the API but if we get here
             //there are no form errors
-            console.log("Submit form");
+            this.props.registerUser(this.state.username, this.state.password, this.state.confirmPassword, this.state.email);
 
             //Erase any previous form errors
             this.setState({ formErrors: [] });
         }
-
-
     }
 
     //Perform basic client-side validation before sending the request to the server
@@ -126,4 +127,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, {clearAuthErrors})(SignUpForm);
+export default connect(mapStateToProps, { clearAuthErrors, registerUser })(SignUpForm);

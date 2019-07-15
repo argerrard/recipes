@@ -98,8 +98,44 @@ export const loginUser = (username, password) => (dispatch, getState) => {
 
 //Action Creator responsible for registering a new user
 //REGISTER_SUCCESS is dispatched on success and REGISTER_FAIL is dispatched on fail
-export const registerUser = () => {
-    return;
+export const registerUser = (username, password, passwordConfirm, email) => (dispatch) => {
+    axios.post('/api/users', { username, password, passwordConfirm, email })
+    .then(response => {
+        //Register was successful, store token and dispatch action
+        localStorage.setItem('access-token', response.data.token);
+
+        dispatch({
+            type: REGISTER_SUCCESS,
+            payload: {
+                user: response.data.user,
+                token: response.data.token
+            }
+        });
+
+        //Re-route to home page
+        history.push('/');
+    })
+    .catch(error => {  
+        //Register Failed
+        const errors = [];
+
+        //Handle case where server did not response
+        if (!error.response.data) {
+            errors.push('Could not contact the server.');
+        } 
+        //Handle case were server responded with errors
+        else {
+            error.response.data.errors.forEach(error => {
+                errors.push(error);
+            });
+        }
+
+        //Dispatch action for failed registry
+        dispatch({
+            type: REGISTER_FAIL,
+            payload: errors
+        })
+    });
 }
 
 //Action Creator response for logging out a user
