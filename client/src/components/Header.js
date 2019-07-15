@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { Dropdown, Button, Menu, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import LoginModal from './auth/LoginModal';
+import AuthModal from './auth/AuthModal';
+import LoginForm from './auth/LoginForm';
+import SignUpForm from './auth/SignUpForm';
 import { logoutUser } from '../actions/auth';
 
 class Header extends React.Component {
@@ -17,10 +19,10 @@ class Header extends React.Component {
         return (
             <>
             <Menu.Item>
-                <LoginModal />
+                <AuthModal buttonName='Login' authForm={<LoginForm />} />
             </Menu.Item>
             <Menu.Item>
-                <Button primary as={Link} to="/signup">Sign Up</Button>
+                <AuthModal buttonName='Register' authForm={<SignUpForm />} />
             </Menu.Item>
             </>
         );

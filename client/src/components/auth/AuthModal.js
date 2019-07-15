@@ -1,9 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'semantic-ui-react';
 
-import LoginForm from './LoginForm';
-
-class LoginModal extends React.Component {
+class AuthModal extends React.Component {
 
     state = { showModal: false }
 
@@ -23,15 +21,15 @@ class LoginModal extends React.Component {
                 closeIcon
                 trigger={
                     <Button primary onClick={()=>this.setState({showModal: true})}>
-                        Login
+                        {this.props.buttonName}
                     </Button>
                 }
             >
-                <LoginForm />
+                {this.props.authForm}
             </Modal>
         );
     }
 
 }
 
-export default LoginModal;
+export default AuthModal;
