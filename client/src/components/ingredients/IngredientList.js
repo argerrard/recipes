@@ -25,6 +25,38 @@ class IngredientList extends React.Component {
         this.props.deleteIngredient(deleteId);
     }
 
+    renderEditItem = (ingredient) => {
+        if (this.props.userId !== ingredient.uploaderid) return null;
+        
+        return (
+            <Link to={`/ingredients/edit/${ingredient.id}`}>
+                <Icon color='blue' name="edit" />
+            </Link>
+        );
+    }
+
+    renderDeleteItem = (ingredient) => {
+        if (this.props.userId !== ingredient.uploaderid) return null;
+
+        return (
+            <DefaultModal 
+                modalTrigger={
+                    <Icon color='red' name="delete"
+                    style={{ cursor: 'pointer' }} />
+                }
+                icon={'trash alternate'}
+                headerMessage={`Ingredient Delete - ${ingredient.name}`}
+                contentMessage={
+                    'Are you sure you want to delete this ingredient?'
+                }
+                size={'tiny'} button1Message={"No"} button2Message={"Delete"}
+                button1Icon='remove' button2Icon='trash'
+                button1Color='blue' button2Color='red'
+                button2OnClick={() => this.deleteIngredient(ingredient.id)}
+            />
+        );
+    }
+
     renderItem = (ingredient) => {
         return (
                 <Item key={ingredient.id}>
@@ -49,26 +81,10 @@ class IngredientList extends React.Component {
                                         Carbs: {Math.round(ingredient.carbs * 10)/10} g
                                     </Grid.Column>
                                     <Grid.Column width={1}>
-                                        <Link to={`/ingredients/edit/${ingredient.id}`}>
-                                            <Icon color='blue' name="edit" />
-                                        </Link>
+                                        {this.renderEditItem(ingredient)}
                                     </Grid.Column>
                                     <Grid.Column width={1}>
-                                        <DefaultModal 
-                                            modalTrigger={
-                                                <Icon color='red' name="delete"
-                                                style={{ cursor: 'pointer' }} />
-                                            }
-                                            icon={'trash alternate'}
-                                            headerMessage={`Ingredient Delete - ${ingredient.name}`}
-                                            contentMessage={
-                                                'Are you sure you want to delete this ingredient?'
-                                            }
-                                            size={'tiny'} button1Message={"No"} button2Message={"Delete"}
-                                            button1Icon='remove' button2Icon='trash'
-                                            button1Color='blue' button2Color='red'
-                                            button2OnClick={() => this.deleteIngredient(ingredient.id)}
-                                        />
+                                        {this.renderDeleteItem(ingredient)}
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
@@ -91,7 +107,8 @@ class IngredientList extends React.Component {
 // ingredientList: the list of ingredients to be displayed
 const mapStateToProps = (state) => {
     return {
-        ingredientList: Object.values(state.ingredient.ingredientList)
+        ingredientList: Object.values(state.ingredient.ingredientList),
+        userId: state.auth.user.id
     };
 }
 
